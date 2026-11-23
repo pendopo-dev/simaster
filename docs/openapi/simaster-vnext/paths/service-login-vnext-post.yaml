@@ -1,0 +1,32 @@
+"post":
+  "tags":
+    - "Low-confidence candidates"
+  "summary": "Legacy service login"
+  "operationId": "low_confidence_candidates_post_service_login_vnext"
+  "description": "Exact path observed; POST and empty body are placeholders only. Do not infer an authentication bypass from the presence of this string.\n\nThis is a low-confidence route candidate. The APK string does not establish the host, method, authentication, or response contract unless the request description says otherwise."
+  "servers":
+    -
+      "url": "https://api.dev.ugm.ac.id"
+      "description": "Development host observed in the APK collection; unverified."
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties": {}
+          "additionalProperties": true
+        "examples":
+          "legacy_service_login":
+            "summary": "Legacy service login"
+            "value": {}
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Legacy service login"

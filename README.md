@@ -116,6 +116,7 @@ and PKCE verifiers are never logged.
 |---|---|
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Layers, module map, current command flow, error model, testing. |
 | [`docs/AUTH.md`](docs/AUTH.md) | Authentication methods, flows, endpoints, storage, threat model. |
+| [`docs/SIMASTER-VNEXT-API.md`](docs/SIMASTER-VNEXT-API.md) | OpenAPI reference for APK-derived vNext and related API routes. |
 | [`docs/CLI-CONTRACT.md`](docs/CLI-CONTRACT.md) | Command grammar, flags, JSON envelope, exit codes, env vars. |
 | [`docs/adr/0001-single-crate.md`](docs/adr/0001-single-crate.md) | Why the project uses one crate. |
 | [`docs/adr/0002-auth-strategy.md`](docs/adr/0002-auth-strategy.md) | Why UGM ID PKCE is primary and web remains the fallback. |
@@ -125,6 +126,28 @@ and PKCE verifiers are never logged.
 | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) | Contributor Covenant 2.1. |
 
 Task state lives in [GitHub Issues](https://github.com/pendopo-dev/simaster/issues).
+
+### Browse and update the API docs
+
+From the repository root, serve the documentation directory locally:
+
+```bash
+python3 -m http.server 8765 --directory docs
+```
+
+Open <http://localhost:8765/api/> for the interactive Scalar reference. The
+viewer loads its UI from a CDN and reads the web and vNext OpenAPI files from
+`docs/openapi/`.
+
+Regenerate the vNext catalog from a Postman collection and check for drift with
+the same collection:
+
+```bash
+bun scripts/sync-spec.ts path/to/SIMASTER.postman_collection.json
+bun scripts/sync-spec.ts --check path/to/SIMASTER.postman_collection.json
+bun test scripts/sync-spec.test.ts
+just api-lint
+```
 
 ## Contributing
 

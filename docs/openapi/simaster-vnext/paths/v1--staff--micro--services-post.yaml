@@ -1,0 +1,57 @@
+"post":
+  "tags":
+    - "Legacy microservices"
+  "summary": "Staff microservice - generic template"
+  "operationId": "legacy_microservices_post_v1_staff_micro_services"
+  "description": "Service name observed; nested params inferred."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "security":
+    -
+      "bearerAuth": []
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties":
+            "micro":
+              "type": "string"
+            "service":
+              "type": "string"
+            "query":
+              "type": "array"
+              "items": {}
+            "param":
+              "type": "array"
+              "items":
+                "type": "array"
+                "items":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+          "additionalProperties": true
+        "examples":
+          "staff_microservice_generic_template":
+            "summary": "Staff microservice - generic template"
+            "value":
+              "micro": "staff"
+              "service": "get_staff_profil_by_staff_id"
+              "query": []
+              "param":
+                -
+                  -
+                    - "{{staff_id}}"
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Staff microservice - generic template"

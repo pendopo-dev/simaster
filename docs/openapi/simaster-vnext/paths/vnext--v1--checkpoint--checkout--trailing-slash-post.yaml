@@ -1,0 +1,74 @@
+"post":
+  "tags":
+    - "Presensi and checkpoint"
+  "summary": "Check out - illustrative"
+  "operationId": "presensi_and_checkpoint_post_vnext_v1_checkpoint_checkout"
+  "description": "Path observed and POST inferred. Confirm whether checkout uses a body, path ID, or both."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "security":
+    -
+      "bearerAuth": []
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties":
+            "checkPointLogId":
+              "type": "string"
+            "check_point_log_check_in":
+              "type": "string"
+            "latitudeGps":
+              "type": "integer"
+            "longitudeGps":
+              "type": "integer"
+          "additionalProperties": true
+        "examples":
+          "check_out_illustrative":
+            "summary": "Check out - illustrative"
+            "value":
+              "checkPointLogId": "{{checkpoint_log_id}}"
+              "check_point_log_check_in": "{{checkin_record_id}}"
+              "latitudeGps": 0
+              "longitudeGps": 0
+  "responses":
+    "200":
+      "description": "Illustrative checkout response. The collection response is illustrative and was not live-tested."
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "success":
+                "type": "boolean"
+              "message":
+                "type": "string"
+              "data":
+                "type": "object"
+                "properties":
+                  "status":
+                    "type": "string"
+                  "checked_out_at":
+                    "type": "string"
+                "additionalProperties": true
+            "additionalProperties": true
+          "examples":
+            "illustrative":
+              "summary": "Illustrative checkout response"
+              "value":
+                "success": true
+                "message": "Checkout successful"
+                "data":
+                  "status": "completed"
+                  "checked_out_at": "2026-11-23T09:01:12+07:00"
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Check out - illustrative"

@@ -1,0 +1,79 @@
+"get":
+  "tags":
+    - "OAuth"
+  "summary": "Authorize - production"
+  "operationId": "oauth_get_oauth_authorize"
+  "description": "Observed OAuth URL. Opens a browser and should redirect with code and state. Do not run against production without authorization.\n\nObserved in the release binary. Use only in an authorized development environment.\n\nUGM documents this endpoint in its [OAuth 2.0/OIDC specification](https://oauth.simaster.ugm.ac.id/openapi.json). The Postman request is static evidence and was not live-tested.\n\nThe UGM schema requires `response_type`, `client_id`, and `redirect_uri`; `scope`, `state`, `code_challenge`, and `code_challenge_method` are optional in that schema. The CLI sends `state`, PKCE parameters, and an OIDC `nonce` for its own validation; UGM does not list `nonce` as an authorization query parameter."
+  "servers":
+    -
+      "url": "https://oauth.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+    -
+      "url": "https://oauth.dev.ugm.ac.id"
+      "description": "Development host observed in the APK collection; unverified."
+  "parameters":
+    -
+      "name": "response_type"
+      "in": "query"
+      "description": "Required by the UGM ID authorization endpoint schema."
+      "schema":
+        "type": "string"
+        "enum":
+          - "code"
+      "example": "code"
+      "required": true
+    -
+      "name": "client_id"
+      "in": "query"
+      "description": "Required by the UGM ID authorization endpoint schema."
+      "schema":
+        "type": "string"
+      "required": true
+    -
+      "name": "redirect_uri"
+      "in": "query"
+      "description": "Registered loopback redirect URI. The mobile app custom-scheme redirect is not used."
+      "schema":
+        "type": "string"
+      "required": true
+    -
+      "name": "scope"
+      "in": "query"
+      "description": "Request read-only scopes only. The CLI uses `openid user.read` and may add `userDetail.read`."
+      "schema":
+        "type": "string"
+    -
+      "name": "state"
+      "in": "query"
+      "description": "Optional in the UGM schema; the CLI sends a one-time value and checks it on callback."
+      "schema":
+        "type": "string"
+    -
+      "name": "code_challenge"
+      "in": "query"
+      "description": "Optional in the UGM schema; required by the CLI PKCE flow."
+      "schema":
+        "type": "string"
+    -
+      "name": "code_challenge_method"
+      "in": "query"
+      "description": "Optional in the UGM schema; the CLI PKCE flow uses S256."
+      "schema":
+        "type": "string"
+        "enum":
+          - "S256"
+  "responses":
+    "302":
+      "description": "Redirects through UGM CAS SSO and consent, then returns to the registered redirect URI."
+      "headers":
+        "Location":
+          "schema":
+            "type": "string"
+  "x-status": "documented by UGM"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Authorize - production"
+      - "Authorize - development/Postman callback"
+    "officialDocumentation": "https://oauth.simaster.ugm.ac.id/openapi.json"

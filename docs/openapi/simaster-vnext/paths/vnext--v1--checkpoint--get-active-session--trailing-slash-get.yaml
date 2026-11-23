@@ -1,0 +1,58 @@
+"get":
+  "tags":
+    - "Presensi and checkpoint"
+  "summary": "Get active checkpoint session"
+  "operationId": "presensi_and_checkpoint_get_vnext_v1_checkpoint_get_active_session"
+  "description": "Path observed. GET is inferred from the getActiveCheckpointSession symbol."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "security":
+    -
+      "bearerAuth": []
+  "responses":
+    "200":
+      "description": "Illustrative active session. The collection response is illustrative and was not live-tested."
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "data":
+                "type": "object"
+                "properties":
+                  "session_id":
+                    "type": "string"
+                  "status":
+                    "type": "string"
+                  "start_at":
+                    "type": "string"
+                  "end_at":
+                    "type": "string"
+                  "latitude":
+                    "type": "number"
+                  "longitude":
+                    "type": "number"
+                  "radius":
+                    "type": "integer"
+                "additionalProperties": true
+            "additionalProperties": true
+          "examples":
+            "illustrative":
+              "summary": "Illustrative active session"
+              "value":
+                "data":
+                  "session_id": "{{checkpoint_session_id}}"
+                  "status": "active"
+                  "start_at": "2026-11-23T07:00:00+07:00"
+                  "end_at": "2026-11-23T09:00:00+07:00"
+                  "latitude": -7.7707
+                  "longitude": 110.3775
+                  "radius": 100
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Get active checkpoint session"

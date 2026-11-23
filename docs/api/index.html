@@ -18,8 +18,11 @@
             url: '../openapi/simaster-web/openapi.yaml',
             default: true,
           },
-          // The vNext document lands with its own issue; add it here as a
-          // second source when docs/openapi/simaster-vnext/ exists.
+          {
+            title: 'SIMASTER vNext',
+            slug: 'vnext',
+            url: '../openapi/simaster-vnext/openapi.yaml',
+          },
         ],
         theme: 'default',
         layout: 'modern',

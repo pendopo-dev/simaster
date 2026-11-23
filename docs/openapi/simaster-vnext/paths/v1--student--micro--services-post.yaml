@@ -1,0 +1,115 @@
+"post":
+  "tags":
+    - "Legacy microservices"
+  "summary": "Student microservice - attendance recap"
+  "operationId": "legacy_microservices_post_v1_student_micro_services"
+  "description": "Outer request shape and service name observed. Method and nested params inferred."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "security":
+    -
+      "bearerAuth": []
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties":
+            "micro":
+              "type": "string"
+            "service":
+              "type": "string"
+            "query":
+              "type": "array"
+              "items": {}
+            "param":
+              "type": "array"
+              "items":
+                "type": "array"
+                "items":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+          "additionalProperties": true
+        "examples":
+          "student_microservice_attendance_recap":
+            "summary": "Student microservice - attendance recap"
+            "value":
+              "micro": "student"
+              "service": "get_studi_kehadiran_rekap"
+              "query": []
+              "param":
+                -
+                  -
+                    - "{{student_niu}}"
+                    - "{{semester_id}}"
+          "student_microservice_attendance_detail":
+            "summary": "Student microservice - attendance detail"
+            "value":
+              "micro": "student"
+              "service": "get_studi_kehadiran_rinci"
+              "query": []
+              "param":
+                -
+                  -
+                    - "{{student_niu}}"
+                    - "{{course_id}}"
+          "student_microservice_agenda_recap":
+            "summary": "Student microservice - agenda recap"
+            "value":
+              "micro": "student"
+              "service": "get_agenda_kehadiran_rekap_student"
+              "query": []
+              "param":
+                -
+                  -
+                    - "{{student_niu}}"
+                    - "{{agenda_id}}"
+          "student_microservice_agenda_detail":
+            "summary": "Student microservice - agenda detail"
+            "value":
+              "micro": "student"
+              "service": "get_agenda_kehadiran_rinci_student"
+              "query": []
+              "param":
+                -
+                  -
+                    - "{{student_niu}}"
+                    - "{{agenda_id}}"
+          "student_microservice_qr_confirmation":
+            "summary": "Student microservice - QR confirmation"
+            "value":
+              "micro": "student"
+              "service": "get_konfirmasi_qr_student"
+              "param":
+                -
+                  -
+                    - "{{qr_code}}"
+          "student_microservice_current_schedule":
+            "summary": "Student microservice - current schedule"
+            "value":
+              "micro": "student"
+              "service": "get_jadwal_anda_now_student"
+              "query": []
+              "param":
+                -
+                  -
+                    []
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Student microservice - attendance recap"
+      - "Student microservice - attendance detail"
+      - "Student microservice - agenda recap"
+      - "Student microservice - agenda detail"
+      - "Student microservice - QR confirmation"
+      - "Student microservice - current schedule"

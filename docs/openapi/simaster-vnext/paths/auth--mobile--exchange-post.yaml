@@ -1,0 +1,35 @@
+"post":
+  "tags":
+    - "Low-confidence candidates"
+  "summary": "Mobile auth exchange"
+  "operationId": "low_confidence_candidates_post_auth_mobile_exchange"
+  "description": "Exact auth-looking path observed. POST, bearer auth, and empty body are placeholders; base host and contract are not proven.\n\nThis is a low-confidence route candidate. The APK string does not establish the host, method, authentication, or response contract unless the request description says otherwise."
+  "servers":
+    -
+      "url": "https://api.dev.ugm.ac.id"
+      "description": "Development host observed in the APK collection; unverified."
+  "security":
+    -
+      "bearerAuth": []
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties": {}
+          "additionalProperties": true
+        "examples":
+          "mobile_auth_exchange":
+            "summary": "Mobile auth exchange"
+            "value": {}
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Mobile auth exchange"

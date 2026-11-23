@@ -1,0 +1,45 @@
+"get":
+  "tags":
+    - "vNext"
+  "summary": "News"
+  "operationId": "vnext_get_vnext_v1_news"
+  "description": "The supplied Postman collection records this request from static APK analysis. It contains no live response for this route."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "parameters":
+    -
+      "name": "unit_id"
+      "in": "query"
+      "description": "Observed query parameter. Whether it is required is unverified."
+      "schema":
+        "type": "integer"
+      "example": 1
+    -
+      "name": "limit"
+      "in": "query"
+      "description": "Observed query parameter. Whether it is required is unverified."
+      "schema":
+        "type": "integer"
+      "example": 7
+    -
+      "name": "skip"
+      "in": "query"
+      "description": "Observed query parameter. Whether it is required is unverified."
+      "schema":
+        "type": "integer"
+      "example": 0
+  "security":
+    -
+      "bearerAuth": []
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "News"
+      - "News exact observed query"

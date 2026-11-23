@@ -1,0 +1,83 @@
+"post":
+  "tags":
+    - "Presensi and checkpoint"
+  "summary": "Check in with QR - illustrative"
+  "operationId": "presensi_and_checkpoint_post_vnext_v1_checkpoint_checkin"
+  "description": "Path and related field names are observed/inferred from the native client. Validate exact casing and required fields in staging."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "security":
+    -
+      "bearerAuth": []
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties":
+            "microQrCode":
+              "type": "string"
+            "latitudeGps":
+              "type": "integer"
+            "longitudeGps":
+              "type": "integer"
+            "accuracy":
+              "type": "number"
+            "checkPointLogId":
+              "type": "string"
+            "check_point_log_check_in":
+              "type": "string"
+          "additionalProperties": true
+        "examples":
+          "check_in_with_qr_illustrative":
+            "summary": "Check in with QR - illustrative"
+            "value":
+              "microQrCode": "{{qr_code}}"
+              "latitudeGps": 0
+              "longitudeGps": 0
+              "accuracy": 8.5
+              "checkPointLogId": "{{checkpoint_log_id}}"
+              "check_point_log_check_in": "{{checkin_record_id}}"
+  "responses":
+    "200":
+      "description": "Illustrative check-in response. The collection response is illustrative and was not live-tested."
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "success":
+                "type": "boolean"
+              "message":
+                "type": "string"
+              "data":
+                "type": "object"
+                "properties":
+                  "attendance_id":
+                    "type": "string"
+                  "status":
+                    "type": "string"
+                  "checked_in_at":
+                    "type": "string"
+                "additionalProperties": true
+            "additionalProperties": true
+          "examples":
+            "illustrative":
+              "summary": "Illustrative check-in response"
+              "value":
+                "success": true
+                "message": "Check-in successful"
+                "data":
+                  "attendance_id": "{{checkin_record_id}}"
+                  "status": "present"
+                  "checked_in_at": "2026-11-23T07:42:10+07:00"
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Check in with QR - illustrative"

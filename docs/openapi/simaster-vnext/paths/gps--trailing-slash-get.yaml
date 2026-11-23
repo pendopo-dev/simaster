@@ -1,0 +1,27 @@
+"get":
+  "tags":
+    - "External integrations"
+  "summary": "Armada GPS"
+  "operationId": "external_integrations_get_gps"
+  "description": "Feature URL observed; method unknown."
+  "servers":
+    -
+      "url": "https://armada.smartcampus.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "parameters":
+    -
+      "name": "from"
+      "in": "query"
+      "description": "Observed query parameter. Whether it is required is unverified."
+      "schema":
+        "type": "string"
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Armada GPS"
+      - "Armada GPS from"

@@ -29,4 +29,4 @@ audit:
 # Lint the multi-file OpenAPI documents (issue #51). Requires Node on PATH;
 # the CLI is fetched on demand, nothing is installed into the repo.
 api-lint:
-    npx --yes @redocly/cli@2.77.0 lint docs/openapi/simaster-web/openapi.yaml
+    npx --yes @redocly/cli@2.77.0 lint docs/openapi/simaster-web/openapi.yaml docs/openapi/simaster-vnext/openapi.yaml

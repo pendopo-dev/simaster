@@ -1,0 +1,26 @@
+"post":
+  "tags":
+    - "External integrations"
+  "summary": "Google OAuth token revoke"
+  "operationId": "external_integrations_post_o_oauth2_revoke"
+  "description": "URL observed in classes4.dex. GET/POST behavior is inferred from the SDK; token is a placeholder."
+  "servers":
+    -
+      "url": "https://accounts.google.com"
+      "description": "Host recorded in the supplied collection."
+  "parameters":
+    -
+      "name": "token"
+      "in": "query"
+      "description": "Sensitive query parameter. Do not log or commit its value."
+      "schema":
+        "type": "string"
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Google OAuth token revoke"

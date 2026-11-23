@@ -1,0 +1,30 @@
+"get":
+  "tags":
+    - "vNext"
+  "summary": "Transgama lane detail"
+  "operationId": "vnext_get_vnext_v1_transgama_lane_lane_id"
+  "description": "The supplied Postman collection records this request from static APK analysis. It contains no live response for this route."
+  "servers":
+    -
+      "url": "https://api.simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "parameters":
+    -
+      "name": "lane_id"
+      "in": "path"
+      "required": true
+      "description": "Path parameter name comes from the Postman placeholder. Its value format is unverified."
+      "schema":
+        "type": "string"
+  "security":
+    -
+      "bearerAuth": []
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Transgama lane detail"

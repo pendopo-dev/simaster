@@ -1,0 +1,19 @@
+"get":
+  "tags":
+    - "External integrations"
+  "summary": "Ruang Hijau API"
+  "operationId": "external_integrations_get_ugm_akses_api"
+  "description": "Feature URL observed; method unknown."
+  "servers":
+    -
+      "url": "https://ruanghijau.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Ruang Hijau API"

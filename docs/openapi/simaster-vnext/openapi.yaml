@@ -1,0 +1,123 @@
+"openapi": "3.1.0"
+"info":
+  "title": "SIMASTER Student vNext and related API catalog"
+  "version": "0.1.0"
+  "summary": "Static APK-derived endpoint catalog. Endpoint behavior is unverified unless marked otherwise."
+  "description": "Catalog generated from the supplied Postman collection, which records static APK analysis dated 2026-11-23 and no live traffic. The collection mixes UGM ID OAuth endpoints, SIMASTER vNext routes, legacy microservices, low-confidence route candidates, and external integrations. Duplicate requests with the same method and path share one operation. Saved response bodies are illustrative. Only the OAuth authorization and token endpoints are marked documented by UGM. All operations have x-live-tested: false. This reference does not authorize live requests. Use only an authorized environment and your own account. Page-navigation requests named SIMASTER services page, SIMASTER home page, Report page, ULT portal, RSA clinic page, DTI knowledge base are omitted. The Armada GPS WebSocket URL is omitted because OpenAPI does not describe its message frames or connection lifecycle."
+"servers":
+  -
+    "url": "https://api.simaster.ugm.ac.id"
+    "description": "Host recorded in the supplied Postman collection."
+"tags":
+  -
+    "name": "OAuth"
+    "description": "UGM ID OAuth 2.0 and OIDC endpoints. The route contract is documented by UGM."
+  -
+    "name": "Presensi and checkpoint"
+    "description": "Attendance and checkpoint routes found in APK static analysis. These include write-like operations; contracts are unverified."
+  -
+    "name": "Legacy microservices"
+    "description": "Student and staff microservice routes and service names found in APK static analysis."
+  -
+    "name": "vNext"
+    "description": "First-party vNext paths recorded in the supplied collection."
+  -
+    "name": "Low-confidence candidates"
+    "description": "Route strings from static analysis with incomplete host, method, authentication, or response contract evidence."
+  -
+    "name": "External integrations"
+    "description": "External services and SDK endpoints referenced by the mobile application."
+"paths":
+  "/auth/mobile/exchange":
+    "$ref": "./paths/auth--mobile--exchange-post.yaml"
+  "/get_menu_vnext":
+    "$ref": "./paths/get-menu-vnext-get.yaml"
+  "/gps/":
+    "$ref": "./paths/gps--trailing-slash-get.yaml"
+  "/haltes":
+    "$ref": "./paths/haltes-get.yaml"
+  "/logs/":
+    "$ref": "./paths/logs--trailing-slash-get.yaml"
+  "/o/oauth2/revoke":
+    "$ref": "./paths/o--oauth2--revoke-post.yaml"
+  "/oauth/authorize":
+    "$ref": "./paths/oauth--authorize-get.yaml"
+  "/oauth/token":
+    "$ref": "./paths/oauth--token-post.yaml"
+  "/ongoing_vnext":
+    "$ref": "./paths/ongoing-vnext-get.yaml"
+  "/presensivnext/api/send_peserta":
+    "$ref": "./paths/presensivnext--api--send-peserta-post.yaml"
+  "/presensivnext/api/signin":
+    "$ref": "./paths/presensivnext--api--signin-post.yaml"
+  "/putaran/":
+    "$ref": "./paths/putaran--trailing-slash-get.yaml"
+  "/service_login_vnext":
+    "$ref": "./paths/service-login-vnext-post.yaml"
+  "/tugas-akhir/bimbingan/":
+    "$ref": "./paths/tugas-akhir--bimbingan--trailing-slash-get.yaml"
+  "/tugas-akhir/dosen_pembimbing/":
+    "$ref": "./paths/tugas-akhir--dosen-pembimbing--trailing-slash-get.yaml"
+  "/ugm-akses/api":
+    "$ref": "./paths/ugm-akses--api-get.yaml"
+  "/v1/staff/micro/doscanent":
+    "$ref": "./paths/v1--staff--micro--doscanent-post.yaml"
+  "/v1/staff/micro/services":
+    "$ref": "./paths/v1--staff--micro--services-post.yaml"
+  "/v1/student/micro/services":
+    "$ref": "./paths/v1--student--micro--services-post.yaml"
+  "/vnext/check-user":
+    "$ref": "./paths/vnext--check-user-get.yaml"
+  "/vnext/v1/banners/get_dynamic":
+    "$ref": "./paths/vnext--v1--banners--get-dynamic-get.yaml"
+  "/vnext/v1/banners/get_intro":
+    "$ref": "./paths/vnext--v1--banners--get-intro-get.yaml"
+  "/vnext/v1/checkpoint/checkin/":
+    "$ref": "./paths/vnext--v1--checkpoint--checkin--trailing-slash-post.yaml"
+  "/vnext/v1/checkpoint/checkout/":
+    "$ref": "./paths/vnext--v1--checkpoint--checkout--trailing-slash-post.yaml"
+  "/vnext/v1/checkpoint/get_active_session/":
+    "$ref": "./paths/vnext--v1--checkpoint--get-active-session--trailing-slash-get.yaml"
+  "/vnext/v1/feeds":
+    "$ref": "./paths/vnext--v1--feeds-get.yaml"
+  "/vnext/v1/feeds/krisis":
+    "$ref": "./paths/vnext--v1--feeds--krisis-get.yaml"
+  "/vnext/v1/fitur/1/":
+    "$ref": "./paths/vnext--v1--fitur--1--trailing-slash-get.yaml"
+  "/vnext/v1/kontak-krisis":
+    "$ref": "./paths/vnext--v1--kontak-krisis-get.yaml"
+  "/vnext/v1/news":
+    "$ref": "./paths/vnext--v1--news-get.yaml"
+  "/vnext/v1/parking-areas":
+    "$ref": "./paths/vnext--v1--parking-areas-get.yaml"
+  "/vnext/v1/portal/vehicle":
+    "$ref": "./paths/vnext--v1--portal--vehicle-get.yaml"
+  "/vnext/v1/students/":
+    "$ref": "./paths/vnext--v1--students--trailing-slash-get.yaml"
+  "/vnext/v1/transgama/halte/terdekat":
+    "$ref": "./paths/vnext--v1--transgama--halte--terdekat-get.yaml"
+  "/vnext/v1/transgama/jadwal/halte":
+    "$ref": "./paths/vnext--v1--transgama--jadwal--halte-get.yaml"
+  "/vnext/v1/transgama/lane/{lane_id}":
+    "$ref": "./paths/vnext--v1--transgama--lane--lane-id-get.yaml"
+  "/vnext/v1/transgama/lanes/":
+    "$ref": "./paths/vnext--v1--transgama--lanes--trailing-slash-get.yaml"
+  "/vnext/v1/transgama/rute":
+    "$ref": "./paths/vnext--v1--transgama--rute-get.yaml"
+  "/vnext/v1/vehicle/user-rules":
+    "$ref": "./paths/vnext--v1--vehicle--user-rules-get.yaml"
+  "/vnext/v1/vehicles":
+    "$ref": "./paths/vnext--v1--vehicles-get.yaml"
+  "/vnext/v1/vehicles/":
+    "$ref": "./paths/vnext--v1--vehicles--trailing-slash-get.yaml"
+"components":
+  "securitySchemes":
+    "bearerAuth":
+      "type": "http"
+      "scheme": "bearer"
+      "bearerFormat": "OAuth 2.0 access token"
+      "description": "Authorization: Bearer access token. Collection evidence does not establish this requirement for endpoints without the header."
+"x-source-collection":
+  "name": "SIMASTER Student vNEXT - Static APK Endpoint Catalog"
+  "description": "Static, documentation-oriented collection generated from every supplied APK split on 2026-11-23. Contains 58 documentation requests, including vNEXT, legacy microservices, presensi, low-confidence legacy/resource candidates, and the observed Google OAuth revoke URL. No live traffic was captured. Methods, field names, and response examples marked inferred must be validated in authorized staging before use."
+  "postman-id": "1b9df0c8-6a44-4fe5-9f67-2cfbb8d08b77"

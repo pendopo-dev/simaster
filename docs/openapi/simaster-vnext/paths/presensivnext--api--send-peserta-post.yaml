@@ -1,0 +1,32 @@
+"post":
+  "tags":
+    - "Presensi and checkpoint"
+  "summary": "Legacy attendance send participant"
+  "operationId": "presensi_and_checkpoint_post_presensivnext_api_send_peserta"
+  "description": "Full URL observed; payload is not recoverable statically."
+  "servers":
+    -
+      "url": "https://simaster.ugm.ac.id"
+      "description": "Host recorded in the supplied collection."
+  "requestBody":
+    "required": true
+    "description": "Request body fields come from the supplied Postman requests. Field requirements remain unverified unless documented by UGM."
+    "content":
+      "application/json":
+        "schema":
+          "type": "object"
+          "properties": {}
+          "additionalProperties": true
+        "examples":
+          "legacy_attendance_send_participant":
+            "summary": "Legacy attendance send participant"
+            "value": {}
+  "responses":
+    "default":
+      "description": "Response status and body are not established by the supplied collection."
+  "x-status": "unverified"
+  "x-live-tested": false
+  "x-provenance":
+    "source": "SIMASTER Student vNEXT - Static APK Endpoint Catalog, supplied Postman collection generated from supplied APK splits on 2026-11-23"
+    "requests":
+      - "Legacy attendance send participant"
