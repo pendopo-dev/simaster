@@ -1,0 +1,617 @@
+{
+  "info": {
+    "_postman_id": "1b9df0c8-6a44-4fe5-9f67-2cfbb8d08b77",
+    "name": "SIMASTER Student vNEXT - Static APK Endpoint Catalog",
+    "description": "Static, documentation-oriented collection generated from every supplied APK split and cross-checked against the public kkn-automation-standalone implementation on 2026-11-23. Contains 68 documentation requests, including the confirmed OAuth/SSO sequence, legacy web login, vNEXT, legacy microservices, presensi, low-confidence resource candidates, and the observed Google OAuth revoke URL. OAuth test scripts automatically persist lt_token, jsessionid, oauth_ticket, csrf_token, authorization_code, access_token, and refresh_token into collection variables. No live traffic was captured. Methods, field names, and response examples marked inferred must be validated in authorized staging before use.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "api_base", "value": "https://api.simaster.ugm.ac.id"},
+    {"key": "dev_api_base", "value": "https://api.dev.ugm.ac.id"},
+    {"key": "preview_api_base", "value": "https://api.preview.ugm.ac.id"},
+    {"key": "checking_api_base", "value": "https://api.checking.ugm.ac.id"},
+    {"key": "oauth_base", "value": "https://oauth.simaster.ugm.ac.id"},
+    {"key": "oauth_dev_base", "value": "https://oauth.dev.ugm.ac.id"},
+    {"key": "sso_base", "value": "https://sso.ugm.ac.id"},
+    {"key": "oauth_client_id", "value": "e6abd4e380a5462e83873fe22ab8c219yVaU"},
+    {"key": "oauth_client_secret", "value": "REPLACE_WITH_ROTATED_SECRET_NEVER_COMMIT"},
+    {"key": "oauth_dev_client_id", "value": "qYzXDQTIkQJT8icPqGAx0TP8"},
+    {"key": "oauth_redirect_uri", "value": "id.ac.ugm.student.vnext.simaster://oauth2"},
+    {"key": "oauth_dev_redirect_uri", "value": "https://oauth.pstmn.io/v1/browser-callback"},
+    {"key": "oauth_service_url", "value": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}"},
+    {"key": "oauth_service_url_encoded", "value": "https%3A%2F%2Foauth.simaster.ugm.ac.id%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3De6abd4e380a5462e83873fe22ab8c219yVaU%26redirect_uri%3Did.ac.ugm.student.vnext.simaster%3A%2F%2Foauth2%26scope%3Duser.read%2Buser.read-write-update%2BuserDetail.read%2Balumni.read%2Bstudent%2Bpegawai.all.read%2Bpegawai.unit.read%2Bstaff%2Btte%2Bnotif.create-read%2Bldap%2Bparent.read%2Bparent.read-write-update%2Bmygate.read-write%2Bvehicle.read%2Btransgama.read"},
+    {"key": "oauth_scope", "value": "user.read user.read-write-update userDetail.read alumni.read student pegawai.all.read pegawai.unit.read staff tte notif.create-read ldap parent.read parent.read-write-update mygate.read-write vehicle.read transgama.read"},
+    {"key": "access_token", "value": "REPLACE_WITH_AUTHORIZED_TOKEN"},
+    {"key": "google_token", "value": "REPLACE_WITH_AUTHORIZED_GOOGLE_TOKEN"},
+    {"key": "refresh_token", "value": "REPLACE_WITH_AUTHORIZED_REFRESH_TOKEN"},
+    {"key": "authorization_code", "value": "REPLACE_WITH_AUTHORIZATION_CODE"},
+    {"key": "code_verifier", "value": "REPLACE_IF_PKCE_IS_REQUIRED"},
+    {"key": "username", "value": "REPLACE_WITH_TEST_USERNAME"},
+    {"key": "password", "value": "REPLACE_WITH_AUTHORIZED_TEST_PASSWORD"},
+    {"key": "ses_id", "value": "REPLACE_WITH_TEST_SESSION_ID"},
+    {"key": "jsessionid", "value": "REPLACE_FROM_SSO_COOKIE_OR_REDIRECT"},
+    {"key": "lt_token", "value": "REPLACE_FROM_SSO_LOGIN_FORM"},
+    {"key": "oauth_ticket", "value": "REPLACE_FROM_CAS_REDIRECT"},
+    {"key": "oauth_session_cookie", "value": "REPLACE_FROM_OAUTH_SET_COOKIE"},
+    {"key": "csrf_token", "value": "REPLACE_FROM_CONSENT_FORM_IF_PRESENT"},
+    {"key": "captcha_cachebuster", "value": "REPLACE_WITH_CACHEBUSTER"},
+    {"key": "simaster_csrf_token", "value": "REPLACE_FROM_LOGIN_PAGE"},
+    {"key": "captcha_value", "value": "REPLACE_WITH_AUTHORIZED_TEST_CAPTCHA"},
+    {"key": "student_niu", "value": "REPLACE_WITH_TEST_STUDENT"},
+    {"key": "semester_id", "value": "REPLACE_WITH_TEST_SEMESTER"},
+    {"key": "qr_code", "value": "REPLACE_WITH_TEST_QR"},
+    {"key": "checkpoint_session_id", "value": "REPLACE_WITH_TEST_SESSION"},
+    {"key": "checkpoint_log_id", "value": "REPLACE_WITH_TEST_LOG"},
+    {"key": "checkin_record_id", "value": "REPLACE_WITH_TEST_CHECKIN"},
+    {"key": "course_id", "value": "REPLACE_WITH_TEST_COURSE"},
+    {"key": "agenda_id", "value": "REPLACE_WITH_TEST_AGENDA"},
+    {"key": "staff_id", "value": "REPLACE_WITH_TEST_STAFF"},
+    {"key": "lane_id", "value": "REPLACE_WITH_TEST_LANE"},
+    {"key": "halte_awal_id", "value": "REPLACE_WITH_TEST_HALTE"},
+    {"key": "plate_number", "value": "REPLACE_WITH_TEST_PLATE"},
+    {"key": "limit", "value": "7"},
+    {"key": "banner_app", "value": "1"},
+    {"key": "origin", "value": "REPLACE_WITH_ORIGIN"},
+    {"key": "latitude", "value": "-7.7707"},
+    {"key": "longitude", "value": "110.3775"}
+  ],
+  "item": [
+    {
+      "name": "01 - OAuth",
+      "item": [
+        {
+          "name": "Authorize - production",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}",
+              "host": ["{{oauth_base}}"],
+              "path": ["oauth", "authorize"],
+              "query": [
+                {"key": "response_type", "value": "code"},
+                {"key": "client_id", "value": "{{oauth_client_id}}"},
+                {"key": "redirect_uri", "value": "{{oauth_redirect_uri}}"},
+                {"key": "scope", "value": "{{oauth_scope}}"}
+              ]
+            },
+            "description": "Observed OAuth URL. The returned SSO HTML is parsed automatically for lt, JSESSIONID, and the encoded service value. Do not run against production without authorization."
+          },
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const html = pm.response.text();", "const quote = String.fromCharCode(34);", "const ltStart = html.indexOf('name=' + quote + 'lt' + quote);", "const valueStart = html.indexOf('value=' + quote, ltStart);", "const valueEnd = valueStart >= 0 ? html.indexOf(quote, valueStart + 7) : -1;", "const ltValue = valueStart >= 0 && valueEnd >= 0 ? html.slice(valueStart + 7, valueEnd) : null;", "if (ltValue) pm.collectionVariables.set('lt_token', ltValue);", "const jsession = pm.cookies.get('JSESSIONID');", "if (jsession) pm.collectionVariables.set('jsessionid', jsession);", "const formStart = html.indexOf('<form');", "const actionStart = html.indexOf('action=' + quote, formStart);", "const actionEnd = actionStart >= 0 ? html.indexOf(quote, actionStart + 8) : -1;", "const action = actionStart >= 0 && actionEnd >= 0 ? html.slice(actionStart + 8, actionEnd) : '';", "const serviceStart = action.indexOf('service=');", "if (serviceStart >= 0) pm.collectionVariables.set('oauth_service_url_encoded', action.slice(serviceStart + 8));", "pm.test('SSO login form and lt token found', function () { pm.expect(ltValue, 'lt hidden field').to.not.equal(null); });"]}}]
+        },
+        {
+          "name": "Authorize - development/Postman callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{oauth_dev_base}}/oauth/authorize?response_type=code&client_id={{oauth_dev_client_id}}&redirect_uri={{oauth_dev_redirect_uri}}&scope={{oauth_scope}}",
+              "host": ["{{oauth_dev_base}}"],
+              "path": ["oauth", "authorize"],
+              "query": [
+                {"key": "response_type", "value": "code"},
+                {"key": "client_id", "value": "{{oauth_dev_client_id}}"},
+                {"key": "redirect_uri", "value": "{{oauth_dev_redirect_uri}}"},
+                {"key": "scope", "value": "{{oauth_scope}}"}
+              ]
+            },
+            "description": "Observed in the release binary. Use only in an authorized development environment."
+          }
+        },
+        {
+          "name": "Exchange authorization code - confirmed implementation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/x-www-form-urlencoded"}
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "grant_type", "value": "authorization_code"},
+                {"key": "code", "value": "{{authorization_code}}"},
+                {"key": "redirect_uri", "value": "{{oauth_redirect_uri}}"},
+                {"key": "client_id", "value": "{{oauth_client_id}}"},
+                {"key": "client_secret", "value": "{{oauth_client_secret}}", "description": "The cross-checked implementation sends a client_secret; use a rotated authorized value and never commit it."}
+              ]
+            },
+            "url": {
+              "raw": "{{oauth_base}}/oauth/token",
+              "host": ["{{oauth_base}}"],
+              "path": ["oauth", "token"]
+            },
+            "description": "POST form fields and client_secret are confirmed by the cross-checked implementation. The public repository contains a hardcoded secret; it is intentionally not copied here. The test script stores access_token and refresh_token from the JSON response."
+          },
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["let data = null;", "try { data = pm.response.json(); } catch (e) {}", "if (data && data.access_token) pm.collectionVariables.set('access_token', data.access_token);", "if (data && data.refresh_token) pm.collectionVariables.set('refresh_token', data.refresh_token);", "if (data && data.expires_in !== undefined) pm.collectionVariables.set('access_token_expires_in', String(data.expires_in));", "pm.test('Bearer access token captured', function () { pm.expect(data && data.access_token, 'access_token in token response').to.be.ok; });"]}}],
+          "response": [
+            {
+              "name": "Illustrative token response",
+              "originalRequest": {"method": "POST", "header": [], "body": {"mode": "urlencoded"}, "url": "{{oauth_base}}/oauth/token"},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": "{\"access_token\":\"<redacted>\",\"refresh_token\":\"<redacted>\",\"token_type\":\"Bearer\",\"expires_in\":3600,\"scope\":\"user.read userDetail.read student\"}"
+            }
+          ]
+        },
+        {
+          "name": "SSO CAS login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/x-www-form-urlencoded"}],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "username", "value": "{{username}}"},
+                {"key": "password", "value": "{{password}}"},
+                {"key": "lt", "value": "{{lt_token}}"},
+                {"key": "_eventId", "value": "submit"},
+                {"key": "submit", "value": "LOGIN"}
+              ]
+            },
+            "url": "{{sso_base}}/cas/login?service={{oauth_service_url_encoded}}"
+          },
+          "description": "Use the exact form action returned by the authorize HTML. The current response uses /cas/login?service=... without ;jsessionid and relies on the preserved JSESSIONID cookie. Submit the fresh hidden lt value; it is one-time/session-bound. The test script captures the CAS ticket from the 302 Location header.",
+          "protocolProfileBehavior": {"disableFollowRedirect": true},
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const location = pm.response.headers.get('Location') || '';", "const ticket = location.match(/[?&]ticket=([^&#]+)/i);", "if (ticket) pm.collectionVariables.set('oauth_ticket', decodeURIComponent(ticket[1]));", "pm.test('CAS ticket captured', function () { pm.expect(ticket, 'ticket in Location header').to.not.equal(null); });"]}}]
+        },
+        {
+          "name": "Authorize with CAS ticket - establish OAuth session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+          },
+          "description": "Confirmed flow step. The test script captures the OAuth session cookie and, if the server skips consent, captures an authorization code directly.",
+          "protocolProfileBehavior": {"disableFollowRedirect": true},
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const setCookie = pm.response.headers.get('Set-Cookie') || '';", "const session = pm.cookies.get('session') || ((setCookie.match(/(?:^|[;,])\\s*session=([^;,\\s]+)/i) || [])[1]);", "if (session) pm.collectionVariables.set('oauth_session_cookie', session);", "const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));"]}}]
+        },
+        {
+          "name": "Authorize with ticket - consent page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+          },
+          "description": "Confirmed flow step. The test script extracts csrf_token when consent HTML is returned. Some sessions may return 302 directly with a code.",
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const html = pm.response.text();", "const quote = String.fromCharCode(34);", "const csrfStart = html.indexOf('name=' + quote + 'csrf_token' + quote);", "const valueStart = html.indexOf('value=' + quote, csrfStart);", "const valueEnd = valueStart >= 0 ? html.indexOf(quote, valueStart + 7) : -1;", "const csrfValue = valueStart >= 0 && valueEnd >= 0 ? html.slice(valueStart + 7, valueEnd) : null;", "if (csrfValue) pm.collectionVariables.set('csrf_token', csrfValue);", "const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));", "pm.test('Consent token or direct code found', function () { pm.expect(csrfValue || code, 'csrf_token or authorization code').to.not.equal(null); });"]}}]
+        },
+        {
+          "name": "Authorize consent - obtain code",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/x-www-form-urlencoded"}],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "confirm", "value": "Izinkan"},
+                {"key": "csrf_token", "value": "{{csrf_token}}", "description": "Include when the consent page contains this field."}
+              ]
+            },
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+          },
+          "description": "Confirmed flow step. The test script captures code from the 302 Location header and stores it as authorization_code. Do not expose the code in logs.",
+          "protocolProfileBehavior": {"disableFollowRedirect": true},
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));", "pm.test('Authorization code captured', function () { pm.expect(code, 'code in Location header').to.not.equal(null); });"]}}]
+        }
+      ]
+    },
+    {
+      "name": "01b - Legacy web authentication",
+      "item": [
+        {
+          "name": "Legacy service_login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/x-www-form-urlencoded"}],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {"key": "aId", "value": ""},
+                {"key": "username", "value": "{{username}}"},
+                {"key": "password", "value": "{{password}}"}
+              ]
+            },
+            "url": "https://simaster.ugm.ac.id/services/simaster/service_login"
+          },
+          "description": "Confirmed by the cross-checked implementation. Expected JSON includes isLogin=1 on success and a web session cookie."
+        },
+        {
+          "name": "Legacy SSO fallback redirect",
+          "request": {"method": "GET", "header": [], "url": "https://simaster.ugm.ac.id/ugmfw/signin_simaster/signin_proses"},
+          "description": "Confirmed fallback entry point; expected 3xx redirect to the UGM SSO service. Do not follow redirects automatically while documenting the flow."
+        },
+        {
+          "name": "Legacy captcha image",
+          "request": {"method": "GET", "header": [], "url": "https://simaster.ugm.ac.id/ugmfw/signin_simaster/captcha_sound/?_={{captcha_cachebuster}}"},
+          "description": "Confirmed fallback endpoint. The cache-buster format is implementation-generated and the image is only requested when captcha verification is required."
+        },
+        {
+          "name": "Legacy captcha verification",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/x-www-form-urlencoded"}],
+            "body": {"mode": "urlencoded", "urlencoded": [{"key": "simasterUGM_token", "value": "{{simaster_csrf_token}}"}, {"key": "captcha", "value": "{{captcha_value}}"}]},
+            "url": "https://simaster.ugm.ac.id/ugmfw/signin_simaster/captchasound_verification"
+          },
+          "description": "Confirmed fallback endpoint. Captcha token/value are placeholders; do not automate against production."
+        }
+      ]
+    },
+    {
+      "name": "02 - Presensi / checkpoint",
+      "item": [
+        {
+          "name": "Get active checkpoint session",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": {
+              "raw": "{{api_base}}/vnext/v1/checkpoint/get_active_session/",
+              "host": ["{{api_base}}"],
+              "path": ["vnext", "v1", "checkpoint", "get_active_session", ""]
+            },
+            "description": "Path observed. GET is inferred from the getActiveCheckpointSession symbol."
+          },
+          "response": [
+            {
+              "name": "Illustrative active session",
+              "originalRequest": {"method": "GET", "header": [], "url": "{{api_base}}/vnext/v1/checkpoint/get_active_session/"},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": "{\"data\":{\"session_id\":\"{{checkpoint_session_id}}\",\"status\":\"active\",\"start_at\":\"2026-11-23T07:00:00+07:00\",\"end_at\":\"2026-11-23T09:00:00+07:00\",\"latitude\":-7.7707,\"longitude\":110.3775,\"radius\":100}}"
+            }
+          ]
+        },
+        {
+          "name": "Check in with QR - illustrative",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"microQrCode\": \"{{qr_code}}\",\n  \"latitudeGps\": {{latitude}},\n  \"longitudeGps\": {{longitude}},\n  \"accuracy\": 8.5,\n  \"checkPointLogId\": \"{{checkpoint_log_id}}\",\n  \"check_point_log_check_in\": \"{{checkin_record_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{api_base}}/vnext/v1/checkpoint/checkin/",
+              "host": ["{{api_base}}"],
+              "path": ["vnext", "v1", "checkpoint", "checkin", ""]
+            },
+            "description": "Path and related field names are observed/inferred from the native client. Validate exact casing and required fields in staging."
+          },
+          "response": [
+            {
+              "name": "Illustrative check-in response",
+              "originalRequest": {"method": "POST", "header": [], "body": {"mode": "raw", "raw": "{}"}, "url": "{{api_base}}/vnext/v1/checkpoint/checkin/"},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": "{\"success\":true,\"message\":\"Check-in successful\",\"data\":{\"attendance_id\":\"{{checkin_record_id}}\",\"status\":\"present\",\"checked_in_at\":\"2026-11-23T07:42:10+07:00\"}}"
+            }
+          ]
+        },
+        {
+          "name": "Check out - illustrative",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"checkPointLogId\": \"{{checkpoint_log_id}}\",\n  \"check_point_log_check_in\": \"{{checkin_record_id}}\",\n  \"latitudeGps\": {{latitude}},\n  \"longitudeGps\": {{longitude}}\n}"
+            },
+            "url": {
+              "raw": "{{api_base}}/vnext/v1/checkpoint/checkout/",
+              "host": ["{{api_base}}"],
+              "path": ["vnext", "v1", "checkpoint", "checkout", ""]
+            },
+            "description": "Path observed and POST inferred. Confirm whether checkout uses a body, path ID, or both."
+          },
+          "response": [
+            {
+              "name": "Illustrative checkout response",
+              "originalRequest": {"method": "POST", "header": [], "body": {"mode": "raw", "raw": "{}"}, "url": "{{api_base}}/vnext/v1/checkpoint/checkout/"},
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": "{\"success\":true,\"message\":\"Checkout successful\",\"data\":{\"status\":\"completed\",\"checked_out_at\":\"2026-11-23T09:01:12+07:00\"}}"
+            }
+          ]
+        },
+        {
+          "name": "Feature 1 - attendance-related route",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": {"raw": "{{api_base}}/vnext/v1/fitur/1/", "host": ["{{api_base}}"], "path": ["vnext", "v1", "fitur", "1", ""]}
+          },
+          "description": "Path observed; method and payload unknown."
+        },
+        {
+          "name": "Legacy attendance sign-in",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{}"},
+            "url": {"raw": "https://simaster.ugm.ac.id/presensivnext/api/signin", "protocol": "https", "host": ["simaster", "ugm", "ac", "id"], "path": ["presensivnext", "api", "signin"]}
+          },
+          "description": "Full URL observed; payload is not recoverable statically."
+        },
+        {
+          "name": "Legacy attendance send participant",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{}"},
+            "url": {"raw": "https://simaster.ugm.ac.id/presensivnext/api/send_peserta", "protocol": "https", "host": ["simaster", "ugm", "ac", "id"], "path": ["presensivnext", "api", "send_peserta"]}
+          },
+          "description": "Full URL observed; payload is not recoverable statically."
+        },
+        {
+          "name": "Checkpoint active session - username path (cross-checked)",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Content-type", "value": "application/json"}, {"key": "Accept", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{api_base}}/vnext/v1/checkpoint/get_active_session/{{username}}"
+          },
+          "description": "The cross-checked implementation uses the username as a path parameter. This is more specific than the APK-only path; validate against the target environment. Example response fields: check_point_log_id, check_point_nama, check_point_log_check_in.",
+          "response": [{"name": "Cross-checked response shape", "originalRequest": {"method": "GET", "header": [], "url": "{{api_base}}/vnext/v1/checkpoint/get_active_session/{{username}}"}, "status": "OK", "code": 200, "_postman_previewlanguage": "json", "header": [{"key": "Content-Type", "value": "application/json"}], "body": "{\"check_point_log_id\":\"{{checkpoint_log_id}}\",\"check_point_nama\":\"Example checkpoint\",\"check_point_log_check_in\":\"2026-11-23 07:42:10\"}"}]
+        },
+        {
+          "name": "Checkpoint check-in - username and QR path (cross-checked)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-type", "value": "application/json"}, {"key": "Accept", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{api_base}}/vnext/v1/checkpoint/checkin/{{username}}/{{qr_code}}?lat={{latitude}}&long={{longitude}}"
+          },
+          "description": "The cross-checked implementation sends no JSON body and supplies lat/long query parameters plus username and QR value in the path. Coordinates in this request are placeholders; do not use fabricated coordinates against production."
+        }
+      ]
+    },
+    {
+      "name": "03 - Legacy microservices",
+      "item": [
+        {
+          "name": "Student microservice - attendance recap",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"micro\": \"student\",\n  \"service\": \"get_studi_kehadiran_rekap\",\n  \"query\": [],\n  \"param\": [[[\"{{student_niu}}\", \"{{semester_id}}\"]]]\n}"
+            },
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          },
+          "description": "Outer request shape and service name observed. Method and nested params inferred."
+        },
+        {
+          "name": "Student microservice - attendance detail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"student\",\"service\":\"get_studi_kehadiran_rinci\",\"query\":[],\"param\":[[[\"{{student_niu}}\",\"{{course_id}}\"]]]}"},
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          }
+        },
+        {
+          "name": "Student microservice - agenda recap",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"student\",\"service\":\"get_agenda_kehadiran_rekap_student\",\"query\":[],\"param\":[[[\"{{student_niu}}\",\"{{agenda_id}}\"]]]}"},
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          }
+        },
+        {
+          "name": "Student microservice - agenda detail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"student\",\"service\":\"get_agenda_kehadiran_rinci_student\",\"query\":[],\"param\":[[[\"{{student_niu}}\",\"{{agenda_id}}\"]]]}"},
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          }
+        },
+        {
+          "name": "Student microservice - QR confirmation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"student\",\"service\":\"get_konfirmasi_qr_student\",\"param\":[[[\"{{qr_code}}\"]]]}"},
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          }
+        },
+        {
+          "name": "Student microservice - current schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"student\",\"service\":\"get_jadwal_anda_now_student\",\"query\":[],\"param\":[[[]]]}"},
+            "url": {"raw": "{{api_base}}/v1/student/micro/services", "host": ["{{api_base}}"], "path": ["v1", "student", "micro", "services"]}
+          }
+        },
+        {
+          "name": "Staff microservice - generic template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"micro\":\"staff\",\"service\":\"get_staff_profil_by_staff_id\",\"query\":[],\"param\":[[[\"{{staff_id}}\"]]]}"},
+            "url": {"raw": "{{api_base}}/v1/staff/micro/services", "host": ["{{api_base}}"], "path": ["v1", "staff", "micro", "services"]}
+          },
+          "description": "Service name observed; nested params inferred."
+        },
+        {
+          "name": "Staff doscanent route",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{}"},
+            "url": {"raw": "{{api_base}}/v1/staff/micro/doscanent", "host": ["{{api_base}}"], "path": ["v1", "staff", "micro", "doscanent"]}
+          },
+          "description": "Route observed; body and method are not confirmed."
+        }
+      ]
+    },
+    {
+      "name": "04 - Other first-party vNEXT paths",
+      "item": [
+        {"name": "Students", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/students/"}},
+        {"name": "Feeds", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/feeds"}},
+        {"name": "Crisis feeds", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/feeds/krisis"}},
+        {"name": "Crisis contacts", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/kontak-krisis"}},
+        {"name": "News", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/news?unit_id=1&limit={{limit}}"}},
+        {"name": "News exact observed query", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/news?unit_id=1&limit=7&skip=0"}},
+        {"name": "Dynamic banner - home", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/banners/get_dynamic?banner_key=pengumuman_home&banner_app={{banner_app}}"}},
+        {"name": "Dynamic banner - parent terms", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/banners/get_dynamic?banner_key=tosparent&banner_app=1"}},
+        {"name": "Intro banner", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/banners/get_intro?banner_app=1"}},
+        {"name": "Vehicles", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/vehicles"}},
+        {"name": "Vehicles trailing slash", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/vehicles/"}},
+        {"name": "Vehicle user rules", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/vehicle/user-rules"}},
+        {"name": "Vehicle portal by plate", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/portal/vehicle?vehicle_plate_number={{plate_number}}"}},
+        {"name": "Parking areas", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/parking-areas"}},
+        {"name": "Transgama lanes", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/lanes/"}},
+        {"name": "Transgama lanes - show_deleted false", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/lanes/?show_deleted=false"}},
+        {"name": "Transgama lane detail", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/lane/{{lane_id}}"}},
+        {"name": "Nearest Transgama halte", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/halte/terdekat?lat={{latitude}}"}},
+        {"name": "Transgama route", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/rute?halte_awal_id={{halte_awal_id}}"}},
+        {"name": "Transgama halte schedule", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{api_base}}/vnext/v1/transgama/jadwal/halte?lane_id={{lane_id}}"}}
+      ]
+    },
+    {
+      "name": "05 - Additional low-confidence network candidates",
+      "item": [
+        {
+          "name": "My Gate check user",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{dev_api_base}}/vnext/check-user?username={{username}}"
+          },
+          "description": "Exact path observed in libapp.so near the My Gate user-search model. Base host, method, auth, payload, and response are not proven; development base is only a safe placeholder."
+        },
+        {
+          "name": "Legacy menu by session",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{dev_api_base}}/get_menu_vnext?sesId={{ses_id}}"
+          },
+          "description": "Exact path observed. Base host and method are not proven; development base is only a safe placeholder."
+        },
+        {
+          "name": "Legacy service login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{}"},
+            "url": "{{dev_api_base}}/service_login_vnext"
+          },
+          "description": "Exact path observed; POST and empty body are placeholders only. Do not infer an authentication bypass from the presence of this string."
+        },
+        {
+          "name": "Legacy ongoing status",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{dev_api_base}}/ongoing_vnext"
+          },
+          "description": "Exact path observed near shared networking strings. Base host, method, auth, payload, and response are not proven."
+        },
+        {
+          "name": "Mobile auth exchange",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{}"},
+            "url": "{{dev_api_base}}/auth/mobile/exchange"
+          },
+          "description": "Exact auth-looking path observed. POST, bearer auth, and empty body are placeholders; base host and contract are not proven."
+        },
+        {
+          "name": "Thesis guidance resource",
+          "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{dev_api_base}}/tugas-akhir/bimbingan/"},
+          "description": "Exact resource-looking path observed; method and base host are inferred."
+        },
+        {
+          "name": "Thesis supervisor resource",
+          "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{dev_api_base}}/tugas-akhir/dosen_pembimbing/"},
+          "description": "Exact resource-looking path observed; method and base host are inferred."
+        },
+        {
+          "name": "Halte resource candidate",
+          "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{dev_api_base}}/haltes"},
+          "description": "Exact path observed near vehicle/study strings; may be a transport resource. Method and base host are inferred."
+        },
+        {
+          "name": "Attendance putaran candidate",
+          "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{dev_api_base}}/putaran/"},
+          "description": "Exact path observed near attendance recap model strings; method and base host are inferred."
+        },
+        {
+          "name": "OSS logs candidate",
+          "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "{{dev_api_base}}/logs/"},
+          "description": "Exact path observed near OSS history-flow strings; method and base host are inferred."
+        }
+      ]
+    },
+    {
+      "name": "06 - SDK external endpoint",
+      "item": [
+        {
+          "name": "Google OAuth token revoke",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "https://accounts.google.com/o/oauth2/revoke?token={{google_token}}"
+          },
+          "description": "URL observed in classes4.dex. GET/POST behavior is inferred from the SDK; token is a placeholder."
+        }
+      ]
+    },
+    {
+      "name": "07 - Other integrations",
+      "item": [
+        {"name": "Ruang Hijau API", "request": {"method": "GET", "header": [], "url": "https://ruanghijau.ugm.ac.id/ugm-akses/api"}, "description": "Feature URL observed; method unknown."},
+        {"name": "Armada GPS", "request": {"method": "GET", "header": [], "url": "https://armada.smartcampus.ugm.ac.id/gps/"}, "description": "Feature URL observed; method unknown."},
+        {"name": "Armada GPS from", "request": {"method": "GET", "header": [], "url": "https://armada.smartcampus.ugm.ac.id/gps/?from={{origin}}"}, "description": "Feature URL observed; method unknown."},
+        {"name": "Armada GPS WebSocket", "request": {"method": "GET", "header": [], "url": "wss://armada.smartcampus.ugm.ac.id/gps/ws?room=room2"}, "description": "WebSocket URL observed; this request is documentation only."},
+        {"name": "SIMASTER services page", "request": {"method": "GET", "header": [], "url": "https://simaster.ugm.ac.id/services/simaster"}},
+        {"name": "SIMASTER home page", "request": {"method": "GET", "header": [], "url": "https://simaster.ugm.ac.id/beranda/beranda/"}},
+        {"name": "Report page", "request": {"method": "GET", "header": [], "url": "https://laporkan.ugm.ac.id/"}},
+        {"name": "ULT portal", "request": {"method": "GET", "header": [], "url": "https://ult.ugm.ac.id/eservices/portal/"}},
+        {"name": "RSA clinic page", "request": {"method": "GET", "header": [], "url": "https://rsa.ugm.ac.id/klinik-eksekutif-rsa-ugm/"}},
+        {"name": "DTI knowledge base", "request": {"method": "GET", "header": [], "url": "https://dti.ugm.ac.id/knowledge-base"}}
+      ]
+    }
+  ]
+}
