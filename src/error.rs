@@ -30,7 +30,6 @@ pub enum Error {
 
 impl Error {
     /// Process exit code for this error.
-    #[must_use]
     pub fn exit_code(&self) -> ExitCode {
         ExitCode::FAILURE
     }
