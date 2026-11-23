@@ -17,8 +17,9 @@
     {"key": "oauth_client_secret", "value": "REPLACE_WITH_ROTATED_SECRET_NEVER_COMMIT"},
     {"key": "oauth_dev_client_id", "value": "qYzXDQTIkQJT8icPqGAx0TP8"},
     {"key": "oauth_redirect_uri", "value": "id.ac.ugm.student.vnext.simaster://oauth2"},
+    {"key": "oauth_redirect_uri_encoded", "value": "id.ac.ugm.student.vnext.simaster%3A%2F%2Foauth2"},
     {"key": "oauth_dev_redirect_uri", "value": "https://oauth.pstmn.io/v1/browser-callback"},
-    {"key": "oauth_service_url", "value": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}"},
+    {"key": "oauth_service_url", "value": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri_encoded}}&scope={{oauth_scope}}"},
     {"key": "oauth_service_url_encoded", "value": "https%3A%2F%2Foauth.simaster.ugm.ac.id%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3De6abd4e380a5462e83873fe22ab8c219yVaU%26redirect_uri%3Did.ac.ugm.student.vnext.simaster%3A%2F%2Foauth2%26scope%3Duser.read%2Buser.read-write-update%2BuserDetail.read%2Balumni.read%2Bstudent%2Bpegawai.all.read%2Bpegawai.unit.read%2Bstaff%2Btte%2Bnotif.create-read%2Bldap%2Bparent.read%2Bparent.read-write-update%2Bmygate.read-write%2Bvehicle.read%2Btransgama.read"},
     {"key": "oauth_scope", "value": "user.read user.read-write-update userDetail.read alumni.read student pegawai.all.read pegawai.unit.read staff tte notif.create-read ldap parent.read parent.read-write-update mygate.read-write vehicle.read transgama.read"},
     {"key": "access_token", "value": "REPLACE_WITH_AUTHORIZED_TOKEN"},
@@ -66,13 +67,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}",
+              "raw": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri_encoded}}&scope={{oauth_scope}}",
               "host": ["{{oauth_base}}"],
               "path": ["oauth", "authorize"],
               "query": [
                 {"key": "response_type", "value": "code"},
                 {"key": "client_id", "value": "{{oauth_client_id}}"},
-                {"key": "redirect_uri", "value": "{{oauth_redirect_uri}}"},
+                {"key": "redirect_uri", "value": "{{oauth_redirect_uri_encoded}}"},
                 {"key": "scope", "value": "{{oauth_scope}}"}
               ]
             },
@@ -162,7 +163,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri_encoded}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
           },
           "description": "Confirmed flow step. The test script captures the OAuth session cookie and, if the server skips consent, captures an authorization code directly.",
           "protocolProfileBehavior": {"disableFollowRedirect": true},
@@ -173,7 +174,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri_encoded}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
           },
           "description": "Confirmed flow step. The test script extracts csrf_token when consent HTML is returned. Some sessions may return 302 directly with a code.",
           "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const html = pm.response.text();", "const quote = String.fromCharCode(34);", "const csrfStart = html.indexOf('name=' + quote + 'csrf_token' + quote);", "const valueStart = html.indexOf('value=' + quote, csrfStart);", "const valueEnd = valueStart >= 0 ? html.indexOf(quote, valueStart + 7) : -1;", "const csrfValue = valueStart >= 0 && valueEnd >= 0 ? html.slice(valueStart + 7, valueEnd) : null;", "if (csrfValue) pm.collectionVariables.set('csrf_token', csrfValue);", "const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));", "pm.test('Consent token or direct code found', function () { pm.expect(csrfValue || code, 'csrf_token or authorization code').to.not.equal(null); });"]}}]
@@ -190,7 +191,7 @@
                 {"key": "csrf_token", "value": "{{csrf_token}}", "description": "Include when the consent page contains this field."}
               ]
             },
-            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
+            "url": "{{oauth_base}}/oauth/authorize?response_type=code&client_id={{oauth_client_id}}&redirect_uri={{oauth_redirect_uri_encoded}}&scope={{oauth_scope}}&ticket={{oauth_ticket}}"
           },
           "description": "Confirmed flow step. The test script captures code from the 302 Location header and stores it as authorization_code. Do not expose the code in logs.",
           "protocolProfileBehavior": {"disableFollowRedirect": true},
