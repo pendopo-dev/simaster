@@ -1,12 +1,11 @@
 use std::process::ExitCode;
 
 /// Errors returned by the CLI.
-///
-/// The walking skeleton maps every error to exit code 1. Later milestones
-/// map auth, network, upstream, and permission failures to exit codes 3-6
-/// as described in `docs/CLI-CONTRACT.md`.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error(transparent)]
+    Auth(#[from] crate::auth::Error),
+
     /// The command exists but its behavior has not landed yet.
     #[error("{0} is not implemented yet")]
     NotImplemented(&'static str),
@@ -31,6 +30,13 @@ pub enum Error {
 impl Error {
     /// Process exit code for this error.
     pub fn exit_code(&self) -> ExitCode {
-        ExitCode::FAILURE
+        match self {
+            Self::Auth(crate::auth::Error::Failed(_)) => ExitCode::from(3),
+            Self::Auth(crate::auth::Error::Network | crate::auth::Error::RateLimited) => {
+                ExitCode::from(4)
+            }
+            Self::Auth(crate::auth::Error::Upstream(_)) => ExitCode::from(5),
+            _ => ExitCode::FAILURE,
+        }
     }
 }

@@ -1,8 +1,6 @@
-//! Offline walking skeleton for the `simaster` CLI.
-//!
-//! Authentication and SIMASTER API access are planned for later milestones.
-//! The available commands are `doctor` and `completions`.
+//! SIMASTER feature modules and command-line adapter.
 
+pub mod auth;
 pub mod cli;
 pub mod config;
 pub mod error;
@@ -15,8 +13,7 @@ use crate::error::Error;
 
 /// Initialize logging and dispatch the selected command.
 ///
-/// The caller owns argument parsing, so a second front end can drive the same
-/// core without fabricating a command line.
+/// Programmatic callers can use the feature modules directly.
 pub fn run_with(cli: Cli) -> Result<(), Error> {
     init_tracing(cli.verbose);
     cli::run(cli)

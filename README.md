@@ -5,8 +5,8 @@ agent-friendly. Built for students who prefer the shell, scripts, and AI agents
 over a web UI.
 
 **Status: pre-alpha.** There is no released binary yet. Offline diagnostics and
-shell completions are available; authentication and SIMASTER data commands are
-not implemented.
+shell completions and browser authentication are available. SIMASTER data
+commands are still stubs.
 
 [![CI](https://github.com/pendopo-dev/simaster/actions/workflows/ci.yml/badge.svg)](https://github.com/pendopo-dev/simaster/actions/workflows/ci.yml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
@@ -46,11 +46,8 @@ simaster --help
 simaster --version
 ```
 
-`doctor` is entirely offline. It never contacts SIMASTER. `auth` and `profile`
-are registered commands that return `not implemented` with exit code 1;
-`whoami` is not registered yet. Browser authentication cannot complete until a
-UGM ID client is registered; the web session with CAS is the fallback design.
-Neither path is implemented.
+`doctor` runs offline. Browser login requires a DTI-registered UGM ID public
+client and an OS keyring. See [Authentication](docs/AUTH.md) for setup.
 
 ## Commands
 
@@ -59,51 +56,32 @@ Neither path is implemented.
 | `simaster doctor` | available | Offline environment and config checks. |
 | `simaster doctor --json` | available | Stable envelope, `schema_version: 1`. |
 | `simaster completions <shell>` | available | `bash`, `zsh`, `fish`, `powershell`, `elvish`. |
-| `simaster auth login` | not implemented | Browser PKCE primary; web session + CAS fallback. |
-| `simaster auth status` | not implemented | Provider, username, scopes, expiry, storage; never token values. |
-| `simaster auth logout` | not implemented | Local delete plus browser logout when possible; reports partial revocation. |
+| `simaster auth login` | available | Browser PKCE with a registered UGM ID client. |
+| `simaster auth status` | available | Local session metadata and expiry. |
+| `simaster auth logout` | available | Remove the local keyring session. |
 | `simaster profile show` | not implemented | Full profile through UGM ID. |
 | `simaster whoami` | not registered | Identity through UGM ID. |
 
-The `auth login` parser accepts `--method auto|browser|web|sso`, `--username`,
-and `--password-stdin`; it fails before doing any work. See
-[`docs/CLI-CONTRACT.md`](docs/CLI-CONTRACT.md) for the full contract.
-
 ## Authentication
 
-The primary strategy is the **official UGM ID OAuth 2.0/OIDC Authorization Code
-flow with PKCE S256**, a public/native client, and a loopback redirect. It is
-used when `SIMASTER_CLIENT_ID` is configured. The flow goes through UGM CAS SSO
-and a consent screen, uses `state` and `nonce`, binds a one-shot listener to
-`127.0.0.1:53682`, validates the ID token with the published JWKS, and never
-handles the UGM password.
+```bash
+SIMASTER_CLIENT_ID=<client-id> simaster auth login
+simaster auth status --json
+simaster auth logout
+```
 
-The **web session with CAS fallback** is used when no UGM ID client is
-configured; it is the only path available until DTI registers one.
-
-The **vNext gateway is a data adapter only**. It is not an authentication
-provider. It may accept the official UGM ID access token; that is `unverified`.
-If it does not, the CLI uses the web data adapter.
-
-The official mobile app's embedded client secret is never copied, bundled,
-shipped, logged, or documented as a value, and its custom-scheme redirect is not
-used. No client secret is shipped for a public client.
-
-See [`docs/AUTH.md`](docs/AUTH.md) and
-[`docs/adr/0002-auth-strategy.md`](docs/adr/0002-auth-strategy.md).
-
-Credentials are never accepted as command-line arguments. Passwords for the web
-fallback are read from a prompt or stdin. Tokens, cookies, authorization codes,
-and PKCE verifiers are never logged.
+UGM ID handles sign-in and consent in the system browser. The CLI requests
+read-only scopes, verifies the ID token, and saves the access token in the OS
+keyring. See [Authentication](docs/AUTH.md) for the callback URI, session
+behavior, and upstream verification status.
 
 ## Agentic usage
 
 - Add `--json` to get machine-readable output. The envelope is versioned with
   `schema_version`; see [`docs/CLI-CONTRACT.md`](docs/CLI-CONTRACT.md).
 - Diagnostics go to stderr; structured output goes to stdout.
-- Exit codes are 0 success, 1 generic or not implemented, and 2 usage today;
-  3-6 are reserved for auth, network, upstream, and forbidden errors. See
-  [`docs/CLI-CONTRACT.md`](docs/CLI-CONTRACT.md).
+- Login uses exit codes 3 for authentication, 4 for network or rate limit, and
+  5 for unexpected upstream responses. See [the CLI contract](docs/CLI-CONTRACT.md).
 - The CLI is read-only. Write commands and a read-only `api` escape hatch are
   tracked in [GitHub Issues](https://github.com/pendopo-dev/simaster/issues).
 - Browser login is interactive; `--json` does not remove the browser step.

@@ -45,7 +45,7 @@ pub enum Command {
 /// Dispatch a parsed command.
 pub fn run(cli: Cli) -> Result<(), Error> {
     match cli.command {
-        Command::Auth(auth) => auth::run(auth),
+        Command::Auth(auth) => auth::run(auth, cli.json),
         Command::Profile(profile) => profile::run(profile),
         Command::Doctor(doctor) => doctor::run(doctor, cli.json),
         Command::Completions(completions) => completions::run(completions),
