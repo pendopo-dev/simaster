@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "1b9df0c8-6a44-4fe5-9f67-2cfbb8d08b77",
     "name": "SIMASTER Student vNEXT - Static APK Endpoint Catalog",
-    "description": "Static, documentation-oriented collection generated from every supplied APK split and cross-checked against the public kkn-automation-standalone implementation on 2026-11-23. Contains 68 documentation requests, including the confirmed OAuth/SSO sequence, legacy web login, vNEXT, legacy microservices, presensi, low-confidence resource candidates, and the observed Google OAuth revoke URL. OAuth test scripts automatically persist lt_token, jsessionid, oauth_ticket, csrf_token, authorization_code, access_token, and refresh_token into collection variables. No live traffic was captured. Methods, field names, and response examples marked inferred must be validated in authorized staging before use.",
+    "description": "Static, documentation-oriented collection generated from every supplied APK split and cross-checked against the public kkn-automation-standalone implementation on 2026-11-23. Contains 68 documentation requests, including the confirmed OAuth/SSO sequence, legacy web login, vNEXT, legacy microservices, presensi, low-confidence resource candidates, and the observed Google OAuth revoke URL. OAuth test scripts automatically persist lt_token, jsessionid, oauth_ticket, csrf_token, authorization_code, access_token, and refresh_token into collection variables. One authorized OAuth handshake was executed to verify the flow; credentials and token values were not saved, and no presensi write was performed. Methods, field names, and response examples marked inferred must be validated in authorized staging before use.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -33,6 +33,7 @@
     {"key": "lt_token", "value": "REPLACE_FROM_SSO_LOGIN_FORM"},
     {"key": "oauth_ticket", "value": "REPLACE_FROM_CAS_REDIRECT"},
     {"key": "oauth_session_cookie", "value": "REPLACE_FROM_OAUTH_SET_COOKIE"},
+    {"key": "oauth_session_cookie_name", "value": "REPLACE_FROM_OAUTH_SET_COOKIE"},
     {"key": "csrf_token", "value": "REPLACE_FROM_CONSENT_FORM_IF_PRESENT"},
     {"key": "captcha_cachebuster", "value": "REPLACE_WITH_CACHEBUSTER"},
     {"key": "simaster_csrf_token", "value": "REPLACE_FROM_LOGIN_PAGE"},
@@ -131,7 +132,7 @@
               "code": 200,
               "_postman_previewlanguage": "json",
               "header": [{"key": "Content-Type", "value": "application/json"}],
-              "body": "{\"access_token\":\"<redacted>\",\"refresh_token\":\"<redacted>\",\"token_type\":\"Bearer\",\"expires_in\":3600,\"scope\":\"user.read userDetail.read student\"}"
+              "body": "{\"access_token\":\"<redacted>\",\"refresh_token\":\"<redacted>\",\"token_type\":\"Bearer\",\"expires_in\":900,\"scope\":\"user.read user.read-write-update userDetail.read alumni.read student pegawai.all.read pegawai.unit.read staff tte notif.create-read ldap parent.read parent.read-write-update mygate.read-write vehicle.read transgama.read\"}"
             }
           ]
         },
@@ -165,7 +166,7 @@
           },
           "description": "Confirmed flow step. The test script captures the OAuth session cookie and, if the server skips consent, captures an authorization code directly.",
           "protocolProfileBehavior": {"disableFollowRedirect": true},
-          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const setCookie = pm.response.headers.get('Set-Cookie') || '';", "const session = pm.cookies.get('session') || ((setCookie.match(/(?:^|[;,])\\s*session=([^;,\\s]+)/i) || [])[1]);", "if (session) pm.collectionVariables.set('oauth_session_cookie', session);", "const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));"]}}]
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const setCookie = pm.response.headers.get('Set-Cookie') || '';", "const session = pm.cookies.get('ugm_oauth_session') || pm.cookies.get('session') || ((setCookie.match(/(?:^|[;,])\\s*ugm_oauth_session=([^;,\\s]+)/i) || [])[1]);", "if (session) pm.collectionVariables.set('oauth_session_cookie', session);", "pm.collectionVariables.set('oauth_session_cookie_name', session ? (pm.cookies.get('ugm_oauth_session') ? 'ugm_oauth_session' : 'session') : '');", "const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));"]}}]
         },
         {
           "name": "Authorize with ticket - consent page",
@@ -193,7 +194,8 @@
           },
           "description": "Confirmed flow step. The test script captures code from the 302 Location header and stores it as authorization_code. Do not expose the code in logs.",
           "protocolProfileBehavior": {"disableFollowRedirect": true},
-          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));", "pm.test('Authorization code captured', function () { pm.expect(code, 'code in Location header').to.not.equal(null); });"]}}]
+          "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["const location = pm.response.headers.get('Location') || '';", "const code = location.match(/[?&]code=([^&#]+)/i);", "if (code) pm.collectionVariables.set('authorization_code', decodeURIComponent(code[1]));", "pm.test('Authorization code captured', function () { pm.expect(code, 'code in Location header').to.not.equal(null); });"]}}],
+          "response": [{"name": "Observed authorized consent redirect", "originalRequest": {"method": "POST", "header": [], "body": {"mode": "urlencoded"}, "url": "{{oauth_base}}/oauth/authorize"}, "status": "Found", "code": 302, "_postman_previewlanguage": "text", "header": [{"key": "Location", "value": "id.ac.ugm.student.vnext.simaster://oauth2/?code=<redacted>"}], "body": ""}]
         }
       ]
     },

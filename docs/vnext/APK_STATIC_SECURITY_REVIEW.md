@@ -4,7 +4,7 @@ Review date: 2026-11-23 (Asia/Jakarta)
 
 ## Scope and limits
 
-Reviewed the supplied split APK set in `apks/`, including every DEX and the x86_64 native split. The app is Flutter; application code is compiled into `lib/x86_64/libapp.so`, so the endpoint and flow inventory below is based on native string/symbol evidence, manifest parsing, and embedded assets. No live endpoint requests, login attempts, traffic interception, or state-changing tests were performed.
+Reviewed the supplied split APK set in `apks/`, including every DEX and the x86_64 native split. The app is Flutter; application code is compiled into `lib/x86_64/libapp.so`, so the endpoint and flow inventory below is based on native string/symbol evidence, manifest parsing, and embedded assets. One authorized OAuth login/consent/token exchange was executed using user-provided credentials to verify the flow. No presensi or other application-data write, traffic interception, or token-value retention was performed.
 
 Package: `id.ac.ugm.student.vnext.simaster`
 
@@ -133,7 +133,7 @@ Remediation:
 
 Severity: High if the secret is accepted by the production token endpoint; at minimum it is credential disclosure.
 
-The public repository [vityasyyy/kkn-automation-standalone](https://github.com/vityasyyy/kkn-automation-standalone) contains the production client ID, redirect URI, OAuth flow, and a hardcoded `CLIENT_SECRET` in `src/utils/attendance.py`. The exact value is intentionally not reproduced here. The repository implementation also confirms the practical flow: OAuth authorize, UGM CAS login, ticket/session-cookie handling, consent authorization, and token exchange.
+The public repository [vityasyyy/kkn-automation-standalone](https://github.com/vityasyyy/kkn-automation-standalone) contains the production client ID, redirect URI, OAuth flow, and a hardcoded `CLIENT_SECRET` in `src/utils/attendance.py`. The exact value is intentionally not reproduced here. The repository implementation also confirms the practical flow: OAuth authorize, UGM CAS login, ticket/session-cookie handling, consent authorization, and token exchange. A live authorized exchange accepted the exposed secret and returned HTTP 200 with Bearer token metadata (`access_token`, `refresh_token`, `scope`, `token_type`, `expires_in=900`); the token values were not retained.
 
 Remediation:
 

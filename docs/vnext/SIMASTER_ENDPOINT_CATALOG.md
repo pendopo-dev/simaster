@@ -4,7 +4,7 @@ Static endpoint documentation generated from the supplied APKs on 2026-11-23.
 
 ## Scope and confidence
 
-This is a client-side inventory. No live requests, login attempts, traffic interception, or state-changing tests were performed. The inventory was expanded across the manifest, every DEX in the supplied split APKs, the Flutter native snapshot (`lib/x86_64/libapp.so`), and embedded URL/path strings.
+This is a client-side inventory. The inventory was expanded across the manifest, every DEX in the supplied split APKs, the Flutter native snapshot (`lib/x86_64/libapp.so`), and embedded URL/path strings. One authorized OAuth login/consent/token exchange was executed on 2026-11-23 using user-provided credentials to verify the flow; no presensi or other application data write was performed, and no credentials or token values were retained.
 
 "Observed" means the host/path or service name is present in the APK. HTTP methods, exact field names, authentication requirements, and response envelopes are marked inferred unless the APK exposed enough evidence to establish them. Values such as {{access_token}}, {{student_niu}}, and {{qr_code}} are placeholders.
 
@@ -80,8 +80,8 @@ Illustrative response, inferred:
   "access_token": "<redacted>",
   "refresh_token": "<redacted>",
   "token_type": "Bearer",
-  "expires_in": 3600,
-  "scope": "user.read userDetail.read student"
+  "expires_in": 900,
+  "scope": "user.read user.read-write-update userDetail.read alumni.read student pegawai.all.read pegawai.unit.read staff tte notif.create-read ldap parent.read parent.read-write-update mygate.read-write vehicle.read transgama.read"
 }
 ~~~
 
@@ -89,13 +89,15 @@ The APK contains access_token, refresh_token, and expiration key names. The actu
 
 ### Cross-checked OAuth/SSO sequence
 
-The repository implementation provides the following more complete sequence:
+The repository implementation provides the following more complete sequence, which was also verified once against the production OAuth service with a user-provided account:
 
 1. `GET https://oauth.simaster.ugm.ac.id/oauth/authorize` with `response_type=code`, `client_id`, `redirect_uri`, and `scope`. It extracts an SSO `JSESSIONID` cookie and a hidden `lt` field from the HTML.
 2. `POST https://sso.ugm.ac.id/cas/login?service={{oauth_service_url}}` with `username`, `password`, `lt`, `_eventId=submit`, and `submit=LOGIN`, preserving the `JSESSIONID` cookie. The returned HTML form uses this no-`;jsessionid` action; the repository implementation also supports the `;jsessionid` form. A successful response is expected to be a 302 containing a CAS `ticket` in `Location`.
-3. `GET https://oauth.simaster.ugm.ac.id/oauth/authorize` again with the same OAuth parameters plus `ticket={{oauth_ticket}}` to establish the OAuth `session` cookie.
+3. `GET https://oauth.simaster.ugm.ac.id/oauth/authorize` again with the same OAuth parameters plus `ticket={{oauth_ticket}}` to establish the OAuth session. The observed cookie name was `ugm_oauth_session` (the APK/repository may refer to it generically as `session`).
 4. `GET` the same authorize URL to obtain the consent page, then `POST` it with `confirm=Izinkan` and `csrf_token` when present. A 302 `Location` is expected to contain `code={{authorization_code}}` and the custom redirect URI.
 5. `POST https://oauth.simaster.ugm.ac.id/oauth/token` as `application/x-www-form-urlencoded` with `grant_type`, `code`, `redirect_uri`, `client_id`, and `client_secret`.
+
+Observed token response metadata from the authorized exchange: HTTP `200`; JSON keys `access_token`, `refresh_token`, `scope`, `token_type`, and `expires_in`; `token_type` was `Bearer` and `expires_in` was `900` seconds. Token values are intentionally not recorded.
 
 The repository source contains a hardcoded OAuth client secret in `src/utils/attendance.py`. The value is intentionally redacted from this catalog and Postman collection. Treat it as compromised: rotate/revoke it and check repository history, forks, CI logs, and deployed OAuth registrations.
 
