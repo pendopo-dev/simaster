@@ -30,7 +30,7 @@ fn doctor_json_has_stable_envelope_and_version() {
 
     assert_eq!(value["schema_version"], 1);
     assert_eq!(value["data"]["version"], env!("CARGO_PKG_VERSION"));
-    assert_eq!(value["data"]["auth"]["status"], "not_configured");
+    assert_eq!(value["data"]["auth"]["status"], "not_checked");
     assert!(value["data"]["auth"]["provider"].is_null());
     assert!(value["meta"]["generated_at_unix"].is_u64());
 }
@@ -44,17 +44,18 @@ fn auth_login_help_exposes_browser_methods_without_vnext() {
         .stdout(predicate::str::contains("auto"))
         .stdout(predicate::str::contains("browser"))
         .stdout(predicate::str::contains("web"))
-        .stdout(predicate::str::contains("sso"))
         .stdout(predicate::str::contains("vnext").not());
 }
 
 #[test]
-fn auth_login_reports_not_implemented() {
+fn auth_login_requires_registered_client_id() {
     simaster()
-        .args(["auth", "login", "--username", "test"])
+        .args(["auth", "login", "--method", "browser"])
+        .env_remove("SIMASTER_CLIENT_ID")
         .assert()
-        .failure()
-        .stderr(predicate::str::contains("not implemented"));
+        .code(1)
+        .stdout(predicate::str::is_empty())
+        .stderr(predicate::str::contains("CONFIG: set SIMASTER_CLIENT_ID"));
 }
 
 #[test]

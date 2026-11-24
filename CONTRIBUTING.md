@@ -7,7 +7,7 @@ handling of student data. By participating, you agree to the
 
 ## Prerequisites
 
-- **Rust stable** (pinned in `rust-toolchain.toml`); **MSRV 1.85** for edition
+- **Rust stable** (pinned in `rust-toolchain.toml`); **MSRV 1.92** for edition
   2024. CI checks the MSRV.
 - **`just`** (optional) — recipes in the `justfile`.
 - **`cargo-nextest`**, **`cargo-deny`**, **`cargo-audit`** (optional) — faster
@@ -29,7 +29,7 @@ cargo fmt --all -- --check
 cargo clippy --all-targets --all-features -- -D warnings
 cargo test --all-features
 RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
-cargo +1.85.0 check --all-features
+cargo +1.92.0 check --all-features
 cargo deny check                   # optional; CI enforces
 cargo audit                        # optional; CI runs weekly
 ```

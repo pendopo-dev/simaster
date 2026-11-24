@@ -63,7 +63,7 @@ pub fn run(_doctor: Doctor, json: bool) -> Result<(), Error> {
         Check {
             name: "auth",
             status: "warn",
-            detail: "no stored session; auth commands are not implemented".to_string(),
+            detail: "session is not checked by doctor".to_string(),
         },
         Check {
             name: "network",
@@ -82,7 +82,7 @@ pub fn run(_doctor: Doctor, json: bool) -> Result<(), Error> {
                 config_dir: config_dir.as_ref().map(|path| path.display().to_string()),
                 auth: AuthState {
                     provider: None,
-                    status: "not_configured",
+                    status: "not_checked",
                 },
                 checks,
             },
@@ -102,7 +102,7 @@ pub fn run(_doctor: Doctor, json: bool) -> Result<(), Error> {
     println!("os: {}", std::env::consts::OS);
     println!("arch: {}", std::env::consts::ARCH);
     println!("config_dir: {config_dir_display}");
-    println!("auth: not configured (provider: none)");
+    println!("auth: not checked");
     println!("checks:");
     for check in &checks {
         println!("  {:7} {}: {}", check.status, check.name, check.detail);

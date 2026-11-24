@@ -16,8 +16,13 @@ allow = [
     "Unlicense",
     "BSL-1.0",
     "MPL-2.0",
+    # libfuzzer-sys pulls NCSA through image's avif feature, which ddddocr
+    # defaults enable for the OSI-approved NCSA license.
+    "NCSA",
 ]
 confidence-threshold = 0.8
+# Mozilla's trust roots bundled by the HTTPS client.
+exceptions = [{ allow = ["CDLA-Permissive-2.0"], crate = "webpki-roots" }]
 
 [bans]
 multiple-versions = "warn"

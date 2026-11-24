@@ -33,9 +33,11 @@ post:
     restart. The failure status code was not captured; treat any non-302 as
     "retry the challenge".
 
-    Solving the CAPTCHA programmatically is a non-goal of this project; a
-    human completes this step (directly, or by importing a session cookie —
-    the "Cookie import" candidate in `docs/AUTH.md`).
+    Solving the CAPTCHA programmatically is now in scope for the user's own
+    login: the CLI classifies image challenges with the ddddocr model, downloaded
+    once into the cache directory and SHA-256 pinned, and escalates audio challenges,
+    model misses, and re-presented challenges to a human at the terminal (the
+    "Cookie import" candidate in `docs/AUTH.md` remains an option).
   security: []
   x-provenance: 'HAR captures 2026-11-11, recorded in issue #52'
   x-status: unverified
@@ -52,7 +54,7 @@ post:
               description: CSRF token from the challenge page HTML.
             captcha:
               type: string
-              description: The human-solved CAPTCHA answer.
+              description: The classified or human-solved CAPTCHA answer.
           required: [simasterUGM_token, captcha]
   responses:
     '302':

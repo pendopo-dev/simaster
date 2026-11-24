@@ -1,0 +1,8 @@
+{
+  "issuer": "oauth.simaster.ugm.ac.id",
+  "authorization_endpoint": "oauth.simaster.ugm.ac.id/oauth/authorize",
+  "token_endpoint": "oauth.simaster.ugm.ac.id/oauth/token",
+  "jwks_uri": "oauth.simaster.ugm.ac.id/.well-known/jwks.json",
+  "code_challenge_methods_supported": ["S256"],
+  "id_token_signing_alg_values_supported": ["RS256"]
+}
