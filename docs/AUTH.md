@@ -11,7 +11,11 @@ simaster auth logout
 Web login checks the saved cookie against SIMASTER before prompting. Omit
 `--username` to reuse the saved account or enter a username at the prompt.
 A fresh login reads the password with terminal echo disabled. If direct login
-doesn't establish a session, the CLI can try UGM CAS. When SIMASTER presents
+doesn't establish a session, the CLI can try UGM CAS; credentials that CAS
+rejects fail as an authentication error (exit 3). UGM's SSO endpoint only
+completes a TLS 1.2 handshake with CBC cipher suites, which rustls does not
+implement, so the web login client uses the platform TLS stack while the
+UGM ID PKCE client keeps rustls. When SIMASTER presents
 a CAPTCHA, the CLI first classifies image challenges with the ddddocr model,
 which is downloaded once (about 54 MB, SHA-256 pinned) into the cache
 directory on first use and then works offline. Challenges the model cannot

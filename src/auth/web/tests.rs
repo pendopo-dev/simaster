@@ -271,6 +271,64 @@ fn captcha_session_lost_fails_the_login() {
 }
 
 #[test]
+fn rejected_cas_credentials_fail_as_auth_not_browser_required() {
+    let portal = Server::http(("127.0.0.1", 0)).unwrap();
+    let cas = Server::http(("127.0.0.1", 0)).unwrap();
+    let (portal_origin, cas_origin) = (
+        format!("http://{}", portal.server_addr()),
+        format!("http://{}", cas.server_addr()),
+    );
+    let mut web = Web::new(&portal_origin, &cas_origin, mock_entry()).unwrap();
+
+    let portal_thread = thread::spawn(move || {
+        respond(
+            next(&portal, Method::Post, "/services/simaster/service_login"),
+            200,
+            r#"{"isLogin":0}"#,
+            &[],
+        );
+        let start = next(&portal, Method::Get, super::SIGNIN);
+        respond(
+            start,
+            302,
+            "",
+            &[(
+                "Location",
+                &format!("{cas_origin}/cas/login?service=simaster"),
+            )],
+        );
+    });
+    let cas_thread = thread::spawn(move || {
+        respond(
+            next(&cas, Method::Get, "/cas/login"),
+            200,
+            r#"<input type="hidden" name="lt" value="mock-lt">"#,
+            &[],
+        );
+        // CAS re-renders its sign-in form for rejected credentials.
+        respond(
+            next(&cas, Method::Post, "/cas/login"),
+            200,
+            r#"<input type="hidden" name="lt" value="mock-lt">"#,
+            &[],
+        );
+    });
+    let result = web.login(
+        "mock-student",
+        "wrong-password",
+        |_| Ok("unused".to_owned()),
+    );
+    portal_thread.join().unwrap();
+    cas_thread.join().unwrap();
+    assert!(matches!(
+        result,
+        Err(super::Error::Failed(
+            "UGM CAS returned the sign-in page; check the username and password"
+        ))
+    ));
+}
+
+#[test]
 fn ocr_rejects_a_model_that_does_not_match_the_pinned_checksum() {
     assert_eq!(super::ocr::verify(b"not the model"), None);
 }

@@ -67,7 +67,10 @@ impl Web {
     }
 
     fn new(portal: &str, cas: &str, store: keyring::Entry) -> Result<Self, Error> {
+        // SSO only negotiates TLS 1.2 with CBC suites, which rustls cannot do,
+        // so the web client uses the platform TLS stack.
         let http = Client::builder()
+            .use_native_tls()
             .redirect(Policy::none())
             .timeout(Duration::from_secs(15))
             .build()
@@ -187,7 +190,13 @@ impl Web {
         ]))?;
         let page = self.follow(response)?;
         if page.url().origin() != self.portal.origin() {
-            return Err(Error::BrowserRequired);
+            // CAS re-renders its sign-in form when it rejects the credentials.
+            return Err(match page.url().path() {
+                "/cas/login" => Error::Failed(
+                    "UGM CAS returned the sign-in page; check the username and password",
+                ),
+                _ => Error::BrowserRequired,
+            });
         }
         match page.url().path() {
             CAPTCHA => self.complete_challenge(page, answer),
