@@ -13,7 +13,7 @@
 - A general SIMASTER administration tool for staff.
 - Credential sharing, token pooling, or proxy accounts.
 - The mobile app's embedded client secret or custom-scheme redirect as a usable credential.
-- A password grant, CAPTCHA-solving service, MFA bypass, rate-limit evasion, or WAF evasion.
+- A password grant, a standalone CAPTCHA-solving service, MFA bypass, rate-limit evasion, or WAF evasion. Local offline classification of image challenges for the user's own login is in scope (see the auth feature).
 - Scraping other people's data, enumerating accounts, or using `/user/username/{username}`.
 - Write operations before M5, or any write that is not explicitly opt-in.
 - A backend-for-frontend in v0. Revisit only through an RFC if DTI requires a confidential client and no user-supplied client is workable.

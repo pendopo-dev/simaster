@@ -5,12 +5,12 @@ agent-friendly. Built for students who prefer the shell, scripts, and AI agents
 over a web UI.
 
 **Status: pre-alpha.** There is no released binary yet. Offline diagnostics and
-shell completions and browser authentication are available. SIMASTER data
+shell completions, web login, and browser authentication are available. SIMASTER data
 commands are still stubs.
 
 [![CI](https://github.com/pendopo-dev/simaster/actions/workflows/ci.yml/badge.svg)](https://github.com/pendopo-dev/simaster/actions/workflows/ci.yml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
-[![MSRV](https://img.shields.io/badge/MSRV-1.85-blue.svg)](Cargo.toml)
+[![MSRV](https://img.shields.io/badge/MSRV-1.92-blue.svg)](Cargo.toml)
 
 ## Why
 
@@ -30,7 +30,7 @@ No release has been published. Build from source:
 cargo install --git https://github.com/pendopo-dev/simaster
 ```
 
-Rust 1.85 or newer is required. The crate uses edition 2024.
+Rust 1.92 or newer is required. The crate uses edition 2024.
 
 ## Quickstart
 
@@ -56,7 +56,7 @@ client and an OS keyring. See [Authentication](docs/AUTH.md) for setup.
 | `simaster doctor` | available | Offline environment and config checks. |
 | `simaster doctor --json` | available | Stable envelope, `schema_version: 1`. |
 | `simaster completions <shell>` | available | `bash`, `zsh`, `fish`, `powershell`, `elvish`. |
-| `simaster auth login` | available | Browser PKCE with a registered UGM ID client. |
+| `simaster auth login` | available | Web login or browser PKCE with a registered UGM ID client. |
 | `simaster auth status` | available | Local session metadata and expiry. |
 | `simaster auth logout` | available | Remove the local keyring session. |
 | `simaster profile show` | not implemented | Full profile through UGM ID. |
@@ -65,15 +65,17 @@ client and an OS keyring. See [Authentication](docs/AUTH.md) for setup.
 ## Authentication
 
 ```bash
-SIMASTER_CLIENT_ID=<client-id> simaster auth login
+simaster auth login --method web
 simaster auth status --json
 simaster auth logout
 ```
 
-UGM ID handles sign-in and consent in the system browser. The CLI requests
-read-only scopes, verifies the ID token, and saves the access token in the OS
-keyring. See [Authentication](docs/AUTH.md) for the callback URI, session
-behavior, and upstream verification status.
+Web login reuses a valid keyring session or prompts for credentials. Image
+CAPTCHAs are classified locally with the ddddocr model, which is downloaded
+once into the cache directory on first use; audio CAPTCHAs and classifier
+misses fall back to a terminal prompt. Browser PKCE is available
+with a registered UGM ID public client. See [Authentication](docs/AUTH.md)
+for setup and verification status.
 
 ## Agentic usage
 

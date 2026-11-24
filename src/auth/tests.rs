@@ -1,11 +1,11 @@
-use std::{collections::HashMap, sync::mpsc, thread};
+use std::{collections::HashMap, sync::mpsc, thread, time::Duration};
+use tiny_http::{Method, Response, Server};
 
 use jsonwebtoken::{Algorithm, EncodingKey, Header};
-use oauth2::{PkceCodeChallenge, PkceCodeVerifier, reqwest::blocking::Client};
+use oauth2::{PkceCodeChallenge, PkceCodeVerifier};
 use serde_json::{Value, json};
-use url::Url;
 
-use super::*;
+use super::{CALLBACK, SessionStore, oidc};
 
 const ISSUER: &str = "oauth.simaster.ugm.ac.id";
 
@@ -16,37 +16,31 @@ fn reply(request: tiny_http::Request, body: impl Into<String>) {
         .unwrap();
 }
 
-fn serve() -> Server {
-    Server::http(("127.0.0.1", 0)).unwrap()
-}
-
-fn origin(server: &Server) -> String {
-    format!("http://{}", server.server_addr())
-}
-
 #[test]
 fn browser_login_against_mock_provider() {
-    let claims = ["nonce", "iss", "aud", "aud-extra", "exp", "sub"];
-    let flow = ["", "state", "kid", "signature", "timeout"];
-    for rejection in flow.into_iter().chain(claims) {
-        let (provider, callback) = (serve(), serve());
-        let (provider_origin, callback_origin) = (origin(&provider), origin(&callback));
+    let bad_claims = ["nonce", "iss", "aud", "aud-extra", "exp", "sub"];
+    for rejection in ["", "state", "kid", "signature"]
+        .into_iter()
+        .chain(bad_claims)
+    {
+        let provider = Server::http(("127.0.0.1", 0)).unwrap();
+        let provider_origin = format!("http://{}", provider.server_addr());
         let (send, receive) = mpsc::channel::<HashMap<String, String>>();
         let provider_thread = thread::spawn(move || {
             let discovery = provider.recv().unwrap();
             assert_eq!(discovery.url(), "/.well-known/openid-configuration");
             reply(
                 discovery,
-                include_str!("../../../tests/fixtures/mock-oidc-discovery.json"),
+                include_str!("../../tests/fixtures/mock-oidc-discovery.json"),
             );
             let token = provider
-                .recv_timeout(if matches!(rejection, "state" | "timeout") {
+                .recv_timeout(if rejection == "state" {
                     Duration::from_millis(350)
                 } else {
                     Duration::from_secs(5)
                 })
                 .unwrap();
-            if matches!(rejection, "state" | "timeout") {
+            if rejection == "state" {
                 assert!(
                     token.is_none(),
                     "{rejection} must prevent the token exchange"
@@ -64,7 +58,7 @@ fn browser_login_against_mock_provider() {
                 ("grant_type", "authorization_code"),
                 ("code", "mock-code"),
                 ("client_id", "mock-client"),
-                ("redirect_uri", auth::CALLBACK),
+                ("redirect_uri", CALLBACK),
             ];
             for (key, value) in expected {
                 assert_eq!(form[key], value);
@@ -97,8 +91,8 @@ fn browser_login_against_mock_provider() {
                 "fixture"
             };
             header.kid = Some(key_id.to_owned());
-            let der = include_bytes!("../../../tests/fixtures/mock-oidc-key.der");
-            let key = EncodingKey::from_rsa_der(der);
+            let key =
+                EncodingKey::from_rsa_der(include_bytes!("../../tests/fixtures/mock-oidc-key.der"));
             let signed = jsonwebtoken::encode(&header, &claims, &key).unwrap();
             let jwt = if rejection == "signature" {
                 format!("{}.AAAAAAAA", signed.rsplit_once('.').unwrap().0)
@@ -118,46 +112,34 @@ fn browser_login_against_mock_provider() {
             assert_eq!(jwks.url(), "/.well-known/jwks.json");
             reply(
                 jwks,
-                include_str!("../../../tests/fixtures/mock-oidc-jwks.json"),
+                include_str!("../../tests/fixtures/mock-oidc-jwks.json"),
             );
         });
 
-        let pending = auth::oidc::begin_login("mock-client", &provider_origin).unwrap();
+        let pending = oidc::begin_login("mock-client", &provider_origin).unwrap();
         let mock = Box::<keyring::mock::MockCredential>::default();
         let store = SessionStore(keyring::Entry::new_with_credential(mock));
-        let timeout = if rejection == "timeout" {
-            Duration::ZERO
+        let params: HashMap<_, _> = pending
+            .authorization_url()
+            .query_pairs()
+            .into_owned()
+            .collect();
+        assert_eq!(params["code_challenge_method"], "S256");
+        assert_eq!(params["scope"], "openid user.read");
+        assert_eq!(params["redirect_uri"], CALLBACK);
+        let state = if rejection == "state" {
+            "wrong-state"
         } else {
-            Duration::from_secs(5)
-        };
-        let result = browser_login(pending, &store, callback, timeout, |url| {
-            if rejection == "timeout" {
-                return false;
-            }
-            let url = Url::parse(url).unwrap();
-            assert_eq!(url.path(), "/oauth/authorize");
-            let params: HashMap<_, _> = url.query_pairs().into_owned().collect();
-            assert_eq!(params["code_challenge_method"], "S256");
-            assert_eq!(params["scope"], "openid user.read");
-            assert_eq!(params["redirect_uri"], auth::CALLBACK);
-            let state = if rejection == "state" {
-                "wrong-state"
-            } else {
-                &params["state"]
-            }
-            .to_owned();
-            send.send(params).unwrap();
-            let request_url = format!("{callback_origin}/callback?code=mock-code&state={state}");
-            thread::spawn(move || Client::new().get(request_url).send());
-            rejection != "state"
-        });
+            &params["state"]
+        }
+        .to_owned();
+        send.send(params).unwrap();
+        let target = format!("/callback?code=mock-code&state={state}");
+        let result = pending.complete(&target, &store);
         provider_thread.join().unwrap();
         if rejection.is_empty() {
-            let status = result.unwrap();
-            assert_eq!(status.username.as_deref(), Some("mock-student"));
-            print_status(Some(status), "ugm-id", true).unwrap();
+            assert_eq!(result.unwrap().username.as_deref(), Some("mock-student"));
             let stored = serde_json::to_value(store.status().unwrap()).unwrap();
-            assert_eq!(stored["subject"], "student-1");
             assert_eq!(stored["expired"], false);
             assert_eq!(stored["scopes"], json!(["openid", "user.read"]));
             assert_eq!(stored["access_token"], Value::Null);

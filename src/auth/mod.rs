@@ -1,6 +1,7 @@
 //! Browser authorization and local sessions.
 
 pub(crate) mod oidc;
+pub mod web;
 
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
@@ -12,13 +13,17 @@ pub const CALLBACK: &str = "http://127.0.0.1:53682/callback";
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error(
+        "AUTH_FAILED: browser interaction is required. Use --method browser with a registered public client"
+    )]
+    BrowserRequired,
     #[error("CONFIG: set SIMASTER_CLIENT_ID to a registered UGM ID public client ID")]
     ClientId,
     #[error("AUTH_FAILED: {0}")]
     Failed(&'static str),
-    #[error("NETWORK: UGM ID request failed")]
+    #[error("NETWORK: login request failed")]
     Network,
-    #[error("RATE_LIMITED: UGM ID asked the client to slow down")]
+    #[error("RATE_LIMITED: the login service asked the client to slow down")]
     RateLimited,
     #[error("UPSTREAM_CHANGED: {0}")]
     Upstream(&'static str),
@@ -152,3 +157,6 @@ fn unix_time() -> Duration {
         .duration_since(UNIX_EPOCH)
         .unwrap_or_default()
 }
+
+#[cfg(test)]
+mod tests;

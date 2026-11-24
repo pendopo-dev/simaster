@@ -11,13 +11,21 @@ Commands are noun-verb; the noun names a resource or surface and the verb names 
 | `simaster doctor` | available | local | Offline diagnostics. |
 | `simaster doctor --json` | available | local | Stable envelope; `schema_version: 1`. |
 | `simaster completions <shell>` | available | local | `bash`, `zsh`, `fish`, `powershell`, `elvish`. |
-| `simaster auth login` | available | UGM ID | Browser PKCE with a registered public client. |
+| `simaster auth login` | available | UGM ID | Web login or browser PKCE with a registered public client. |
 | `simaster auth status` | available | local | Read keyring metadata and report local expiry. |
 | `simaster auth logout` | available | local | Delete the local keyring session. |
 | `simaster profile show` | not implemented | UGM ID | Returns `not implemented`. |
 | `simaster whoami` | not registered | UGM ID | Not in the command tree. |
 
-Login accepts `--method auto|browser`. Both values require `SIMASTER_CLIENT_ID` and use the system browser. Login binds `127.0.0.1:53682/callback` for up to five minutes.
+Login accepts `--method auto|web|browser`. Auto chooses browser when
+`SIMASTER_CLIENT_ID` is set, and web otherwise. Web accepts an optional
+`--username`, reuses a valid keyring session, prompts for credentials on a
+terminal, and answers image CAPTCHAs with the ddddocr model first (downloaded
+once into the cache directory), prompting
+only for audio challenges, model misses, or retries after a rejection.
+Browser requires a registered client ID and binds
+`127.0.0.1:53682/callback` for up to five minutes. If web login requires
+browser interaction, it can switch to PKCE with a configured client ID.
 
 ## Global flags
 
@@ -59,15 +67,15 @@ For `auth login --json` and `auth status --json`, `data` contains:
 | Field | Values |
 |---|---|
 | `status` | `signed_in`, `signed_out`, or `expired` |
-| `provider` | `ugm-id` or null |
+| `provider` | `ugm-id`, `web`, or null |
 | `username` | String or null |
 | `scopes` | Array of scope strings |
 | `expires_at_unix` | Unix seconds or null |
 | `storage` | `keyring` |
 
 For `auth logout --json`, `data.removed` is true if a credential was removed.
-Login uses source `ugm-id`. Status and logout use source `local`. All three
-currently use null for `meta.fetched_at`. A missing or expired local session
+Login uses source `ugm-id` or `web`. Status and logout use source `local`. All three
+currently use null for `meta.fetched_at`. A missing or locally expired browser session
 is a successful status read. Auth errors leave stdout empty.
 
 ## Exit codes
@@ -113,7 +121,7 @@ Precedence, highest first: command-line flags; `SIMASTER_*` environment variable
 | `RUST_LOG` | available | Log filter; overrides `--verbose`. |
 | `NO_COLOR` | available | Disable color in human output. |
 
-Log precedence is `RUST_LOG` > `--verbose` > default `warn`. A public/native client uses `token_endpoint_auth_method=none`.
+For SIMASTER logs, precedence is `RUST_LOG` > `--verbose` > default `warn`. A public/native client uses `token_endpoint_auth_method=none`.
 
 ## Help, completions, and versioning
 

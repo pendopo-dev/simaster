@@ -21,9 +21,9 @@ Use one package, `simaster-cli`, with:
 - modules `cli`, `config`, `error`, and `output`; auth and API modules live in
   the same crate when implemented.
 
-The binary stays thin: it calls `simaster_cli::run_with(Cli::parse())`, prints a
-redacted error, and returns the exit code. Logic belongs in the library so
-integration tests, the MCP server, and any future front end reuse it.
+The binary owns command parsing, terminal and browser interaction, and exit
+codes. Reusable auth and data operations live in the library so programmatic
+callers can use them without routing through the CLI.
 
 ## Consequences
 

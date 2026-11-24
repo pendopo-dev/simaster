@@ -1,16 +1,16 @@
 # Architecture
 
 SIMASTER uses one Cargo package with a CLI binary and Rust library. The binary
-parses arguments and maps errors to process exit codes. The library contains
-feature modules and the CLI adapter.
+parses arguments and maps errors to process exit codes. The library contains reusable feature modules. The binary owns the CLI adapter.
 
 ```text
 src/
 ├── main.rs      Process entry and exit codes
-├── lib.rs       Library modules and CLI tracing setup
+├── lib.rs       Reusable feature modules
 ├── auth/
 │   ├── mod.rs   Pending login, callback validation, local session store
-│   └── oidc.rs  UGM ID discovery, code exchange, and ID-token verification
+│   ├── oidc.rs  UGM ID discovery, code exchange, and ID-token verification
+│   └── web.rs   Web and CAS login, challenge handling, and cookie reuse
 └── cli/         Argument parsing, browser and loopback, JSON and terminal output
 ```
 
@@ -18,7 +18,9 @@ The CLI calls `auth::begin_login`, opens the authorization URL, and supplies the
 loopback request target to `PendingLogin::complete`. Auth validates the callback,
 exchanges the code, and persists the session. Callers receive typed session
 metadata and errors. The feature module has no dependency on clap, terminal
-output, or a browser launcher.
+output, or a browser launcher. The web feature passes each challenge to a
+caller callback and submits the answer — model-classified image challenges
+first, human answers otherwise — in the same HTTP session.
 
 Put each new reusable operation in its feature module and keep its command
 mapping in `cli/`. A Rust SDK consumer can call the same feature operations

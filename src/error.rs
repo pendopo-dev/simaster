@@ -31,7 +31,9 @@ impl Error {
     /// Process exit code for this error.
     pub fn exit_code(&self) -> ExitCode {
         match self {
-            Self::Auth(crate::auth::Error::Failed(_)) => ExitCode::from(3),
+            Self::Auth(crate::auth::Error::Failed(_) | crate::auth::Error::BrowserRequired) => {
+                ExitCode::from(3)
+            }
             Self::Auth(crate::auth::Error::Network | crate::auth::Error::RateLimited) => {
                 ExitCode::from(4)
             }

@@ -26,3 +26,6 @@ tarpaulin-report.*
 # Agent task state and worker reports
 docs/plans/
 WORKER-REPORT.md
+
+# The CAPTCHA model is downloaded into the user cache, not committed.
+*.onnx

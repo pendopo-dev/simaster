@@ -22,7 +22,7 @@ discussion or RFC when one exists.
 - [ ] `cargo clippy --all-targets --all-features -- -D warnings`
 - [ ] `cargo test --all-features`
 - [ ] `RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features`
-- [ ] `cargo +1.85.0 check --all-features` when the MSRV is relevant
+- [ ] `cargo +1.92.0 check --all-features` when the MSRV is relevant
 - [ ] `cargo deny check` when dependencies changed
 
 Commands and results:

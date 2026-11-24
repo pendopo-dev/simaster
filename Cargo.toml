@@ -2,7 +2,7 @@
 name = "simaster-cli"
 version = "0.1.0-alpha.1"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.92"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/pendopo-dev/simaster"
 homepage = "https://github.com/pendopo-dev/simaster"
@@ -24,13 +24,22 @@ all = "warn"
 [dependencies]
 clap = { version = "4.6.7", features = ["derive", "env", "wrap_help"] }
 clap_complete = "4.6.11"
+cookie-net = { version = "0.9", features = ["jar"] }
+ddddocr-core = "0.2.4"
+ddddocr-tract2 = "0.2.4"
 directories = "6.0.0"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
 jsonwebtoken = { version = "10", default-features = false, features = ["aws_lc_rs"] }
 keyring = { version = "3", features = ["async-secret-service", "tokio", "crypto-rust", "apple-native", "windows-native"] }
 oauth2 = { version = "5", default-features = false, features = ["reqwest-blocking", "rustls-tls", "timing-resistant-secret-traits"] }
 open = "5"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "rustls-tls"] }
+rpassword = "7"
+scraper = { version = "0.24", default-features = false }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
+sha2 = "0.10"
+tempfile = "3"
 thiserror = "2.0.21"
 tiny_http = "0.12"
 tracing = "0.1.44"

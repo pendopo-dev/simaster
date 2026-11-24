@@ -43,6 +43,7 @@ fn auth_login_help_exposes_browser_methods_without_vnext() {
         .success()
         .stdout(predicate::str::contains("auto"))
         .stdout(predicate::str::contains("browser"))
+        .stdout(predicate::str::contains("web"))
         .stdout(predicate::str::contains("vnext").not());
 }
 
